@@ -75,14 +75,11 @@ public class LineCardTwo extends CardController {
 		gridPaint.setStrokeWidth(Tools.fromDpToPx(.75f));
 
 		mChart.setXLabels(AxisRenderer.LabelPosition.OUTSIDE)
-				  .setYLabels(AxisRenderer.LabelPosition.NONE)
-				  .setGrid(0, 7, gridPaint)
-				  .setValueThreshold(80f, 80f, thresPaint)
-				  .setAxisBorderValues(0, 110);
-
-		Animation anim = new Animation().fromXY(0, .5f).withEndAction(action);
-
-		mChart.show(anim);
+				.setYLabels(AxisRenderer.LabelPosition.NONE)
+				.setGrid(0, 7, gridPaint)
+				.setValueThreshold(80f, 80f, thresPaint)
+				.setAxisBorderValues(0, 110)
+				.show(new Animation().fromXY(0, .5f).withEndAction(action));
 	}
 
 

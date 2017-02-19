@@ -127,15 +127,11 @@ public class StackedCardOne extends CardController {
 		stackBarSet.setColor(Color.parseColor("#ff7a57"));
 		mChart.addData(stackBarSet);
 
-		mChart.setBarSpacing(Tools.fromDpToPx(15));
-		mChart.setRoundCorners(Tools.fromDpToPx(1));
-
+		int[] order = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
 		mChart.setXLabels(XRenderer.LabelPosition.OUTSIDE)
 				.setYLabels(YRenderer.LabelPosition.NONE)
-				.setValueThreshold(89.f, 89.f, thresPaint);
-
-		int[] order = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-		mChart.show(new Animation().inSequence(.5f, order).withEndAction(action));
+				.setValueThreshold(89.f, 89.f, thresPaint)
+				.show(new Animation().inSequence(.5f, order).withEndAction(action));
 	}
 
 

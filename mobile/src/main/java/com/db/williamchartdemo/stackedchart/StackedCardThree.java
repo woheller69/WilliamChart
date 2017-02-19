@@ -54,14 +54,9 @@ public class StackedCardThree extends CardController {
 		dataset.setColor(Color.parseColor("#FF5C8E67"));
 		mChart.addData(dataset);
 
-		mChart.setRoundCorners(Tools.fromDpToPx(5));
-		mChart.setBarSpacing(Tools.fromDpToPx(5));
-
-		mChart.setAxisBorderValues(-80, 80, 10);
-
-		Animation anim = new Animation().setInterpolator(new DecelerateInterpolator()).withEndAction(action);
-
-		mChart.show(anim);
+		mChart.setAxisBorderValues(-80, 80, 10)
+				.show(new Animation().setInterpolator(new DecelerateInterpolator())
+						.withEndAction(action));
 	}
 
 

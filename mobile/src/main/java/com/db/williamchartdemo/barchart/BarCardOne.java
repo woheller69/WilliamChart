@@ -48,14 +48,6 @@ public class BarCardOne extends CardController {
 		barSet.setColor(Color.parseColor("#fc2a53"));
 		mChart.addData(barSet);
 
-		mChart.setBarSpacing(Tools.fromDpToPx(20));
-		mChart.setRoundCorners(Tools.fromDpToPx(2));
-		mChart.setBarBackgroundColor(Color.parseColor("#592932"));
-
-		// Chart
-		mChart.setXLabels(XRenderer.LabelPosition.OUTSIDE)
-				  .setYLabels(YRenderer.LabelPosition.NONE);
-
 		int[] order = {1, 0, 2, 3};
 		final Runnable auxAction = action;
 		Runnable chartOneAction = new Runnable() {
@@ -66,7 +58,10 @@ public class BarCardOne extends CardController {
 				showTooltip();
 			}
 		};
-		mChart.show(new Animation().inSequence(.5f, order).withEndAction(chartOneAction));
+
+		mChart.setXLabels(XRenderer.LabelPosition.OUTSIDE)
+				.setYLabels(YRenderer.LabelPosition.NONE)
+				.show(new Animation().inSequence(.5f, order).withEndAction(chartOneAction));
 	}
 
 

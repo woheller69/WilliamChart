@@ -55,8 +55,6 @@ public class StackedCardTwo extends CardController {
 		gridPaint.setAntiAlias(true);
 		gridPaint.setStrokeWidth(Tools.fromDpToPx(.7f));
 
-		mChart.setBarSpacing(Tools.fromDpToPx(10));
-
 		mChart.setStep(1)
 				.setGrid(0, 10, gridPaint)
 				.setLabelsFormat(new DecimalFormat("##'M'"))

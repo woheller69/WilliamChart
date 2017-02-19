@@ -28,7 +28,8 @@
             williamchart:chart_typeface="OpenSans-Regular.ttf"
             williamchart:chart_axis="false"
             williamchart:chart_labelColor="#FF8E8A84"
-            williamchart:chart_axisBorderSpacing="0dp"/>
+            williamchart:chart_axisBorderSpacing="0dp"
+            williamchart:chart_barSpacing="4dp"/>
 
         <TextView
             android:id="@+id/value"

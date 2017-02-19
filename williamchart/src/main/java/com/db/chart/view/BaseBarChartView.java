@@ -19,6 +19,7 @@ package com.db.chart.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.support.annotation.ColorInt;
@@ -198,8 +199,6 @@ public abstract class BaseBarChartView extends ChartView {
 
 		style.hasBarBackground = true;
 		style.mBarBackgroundColor = color;
-		if (style.barBackgroundPaint != null)
-			style.barBackgroundPaint.setColor(style.mBarBackgroundColor);
 	}
 
 
@@ -259,12 +258,13 @@ public abstract class BaseBarChartView extends ChartView {
 
 		Style(TypedArray attrs) {
 
-			mBarBackgroundColor = DEFAULT_COLOR;
-			hasBarBackground = false;
+			mBarBackgroundColor = attrs.getColor(R.styleable.BarChartAttrs_chart_barBackgroundColor,
+					-1);
+			hasBarBackground = mBarBackgroundColor != -1;
 
 			barSpacing = attrs.getDimension(R.styleable.BarChartAttrs_chart_barSpacing,
 					  getResources().getDimension(R.dimen.bar_spacing));
-			setSpacing = attrs.getDimension(R.styleable.BarChartAttrs_chart_barSpacing,
+			setSpacing = attrs.getDimension(R.styleable.BarChartAttrs_chart_setSpacing,
 					  getResources().getDimension(R.dimen.set_spacing));
 			cornerRadius = attrs.getDimension(R.styleable.BarChartAttrs_chart_cornerRadius,
 					  getResources().getDimension(R.dimen.corner_radius));

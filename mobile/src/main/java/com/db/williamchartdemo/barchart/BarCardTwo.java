@@ -93,40 +93,25 @@ public class BarCardTwo extends CardController {
 			}
 		});
 
-
 		BarSet barSet = new BarSet();
 		Bar bar;
 		for (int i = 0; i < mLabels.length; i++) {
 			bar = new Bar(mLabels[i], mValues[0][i]);
 			switch (i) {
-				case 0:
-					bar.setColor(Color.parseColor("#77c63d"));
-					break;
-				case 1:
-					bar.setColor(Color.parseColor("#27ae60"));
-					break;
-				case 2:
-					bar.setColor(Color.parseColor("#47bac1"));
-					break;
-				case 3:
-					bar.setColor(Color.parseColor("#16a085"));
-					break;
-				case 4:
-					bar.setColor(Color.parseColor("#3498db"));
-					break;
-				default:
-					break;
+				case 0: bar.setColor(Color.parseColor("#77c63d")); break;
+				case 1: bar.setColor(Color.parseColor("#27ae60")); break;
+				case 2: bar.setColor(Color.parseColor("#47bac1")); break;
+				case 3: bar.setColor(Color.parseColor("#16a085")); break;
+				case 4: bar.setColor(Color.parseColor("#3498db")); break;
+				default: break;
 			}
 			barSet.addBar(bar);
 		}
-
 		mChart.addData(barSet);
-		mChart.setBarSpacing(Tools.fromDpToPx(4));
-
-		mChart.setXLabels(XRenderer.LabelPosition.NONE);
 
 		int[] order = {4, 3, 2, 1, 0};
-		mChart.show(new Animation().inSequence(.5f, order).withEndAction(action));
+		mChart.setXLabels(XRenderer.LabelPosition.NONE)
+				.show(new Animation().inSequence(.5f, order).withEndAction(action));
 	}
 
 

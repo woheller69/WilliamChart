@@ -55,24 +55,19 @@ public class BarCardThree extends CardController {
 
 		Tooltip tip = new Tooltip(mContext);
 		tip.setBackgroundColor(Color.parseColor("#CC7B1F"));
-
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 			PropertyValuesHolder alpha = PropertyValuesHolder.ofFloat(View.ALPHA, 1);
 			tip.setEnterAnimation(alpha).setDuration(150);
-
 			alpha = PropertyValuesHolder.ofFloat(View.ALPHA, 0);
 			tip.setExitAnimation(alpha).setDuration(150);
 		}
-
-		mChart.setTooltips(tip);
 
 		BarSet dataset = new BarSet(mLabels, mValues[0]);
 		dataset.setColor(Color.parseColor("#eb993b"));
 		mChart.addData(dataset);
 
-		mChart.setBarSpacing(Tools.fromDpToPx(1.5f));
-
-		mChart.show(new Animation().setInterpolator(new AccelerateDecelerateInterpolator())
+		mChart.setTooltips(tip)
+				.show(new Animation().setInterpolator(new AccelerateDecelerateInterpolator())
 				.withEndAction(action));
 	}
 

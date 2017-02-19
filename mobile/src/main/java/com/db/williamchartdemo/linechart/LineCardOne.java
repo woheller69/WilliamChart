@@ -76,8 +76,6 @@ public class LineCardOne extends CardController {
 			mTip.setPivotY(Tools.fromDpToPx(25));
 		}
 
-		mChart.setTooltips(mTip);
-
 		// Data
 		LineSet dataset = new LineSet(mLabels, mValues[0]);
 		dataset.setColor(Color.parseColor("#758cbb"))
@@ -96,10 +94,6 @@ public class LineCardOne extends CardController {
 				  .endAt(6);
 		mChart.addData(dataset);
 
-		// Chart
-		mChart.setAxisBorderValues(0, 20)
-				.setYLabels(AxisRenderer.LabelPosition.NONE);
-
 		mBaseAction = action;
 		Runnable chartAction = new Runnable() {
 			@Override
@@ -111,11 +105,12 @@ public class LineCardOne extends CardController {
 			}
 		};
 
-		Animation anim = new Animation().setInterpolator(new BounceInterpolator())
-				.fromAlpha(0)
-				.withEndAction(chartAction);
-
-		mChart.show(anim);
+		mChart.setAxisBorderValues(0, 20)
+				.setYLabels(AxisRenderer.LabelPosition.NONE)
+				.setTooltips(mTip)
+				.show(new Animation().setInterpolator(new BounceInterpolator())
+						.fromAlpha(0)
+						.withEndAction(chartAction));
 	}
 
 
