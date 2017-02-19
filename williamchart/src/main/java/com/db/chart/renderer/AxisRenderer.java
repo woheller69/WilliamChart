@@ -49,9 +49,6 @@ public abstract class AxisRenderer {
 	/** Number of labels */
 	int nLabels;
 
-	/** Labels Metric to draw together with labels */
-	private DecimalFormat labelFormat;
-
 	/** Maximum value of labels */
 	private float maxLabelValue;
 
@@ -107,7 +104,7 @@ public abstract class AxisRenderer {
 			}
 			if (!hasStep()) setBorderValues(minLabelValue, maxLabelValue);
 			labelsValues = calculateValues(minLabelValue, maxLabelValue, step);
-			labels = convertToLabelsFormat(labelsValues, labelFormat);
+			labels = convertToLabelsFormat(labelsValues, style.getLabelsFormat());
 		} else {
 			labels = extractLabels(data);
 		}
@@ -179,7 +176,6 @@ public abstract class AxisRenderer {
 		mandatoryBorderSpacing = 0;
 		step = -1;
 		labelsStaticPos = 0;
-		labelFormat = new DecimalFormat();
 		axisPosition = 0;
 		minLabelValue = 0;
 		maxLabelValue = 0;
@@ -446,18 +442,6 @@ public abstract class AxisRenderer {
 	public void setHandleValues(boolean bool) {
 
 		handleValues = bool;
-	}
-
-
-	/**
-	 * Set labels format. For instance, use {@link DecimalFormat}
-	 * to append the metric 'KB' to labels.
-	 *
-	 * @param format {@link DecimalFormat} to be used when defining axis labels.
-	 */
-	public void setLabelsFormat(DecimalFormat format) {
-
-		this.labelFormat = format;
 	}
 
 

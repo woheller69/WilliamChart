@@ -14,6 +14,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
@@ -133,6 +134,7 @@ public class YRendererTest {
 	@Test
 	public void parsePos_HandleValuesNoLabels_Result(){
 
+		when(mStyleMock.getLabelsFormat()).thenReturn(new DecimalFormat());
 		when(mStyleMock.hasXAxis()).thenReturn(false);
 		when(mStyleMock.getYLabelsPositioning()).thenReturn(AxisRenderer.LabelPosition.NONE);
 

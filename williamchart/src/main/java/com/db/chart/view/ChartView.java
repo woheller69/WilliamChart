@@ -1028,9 +1028,7 @@ public abstract class ChartView extends RelativeLayout {
 	public ChartView setLabelsFormat(@NonNull DecimalFormat format) {
 
         checkNotNull(format);
-		if (mOrientation == Orientation.VERTICAL) yRndr.setLabelsFormat(format);
-		else xRndr.setLabelsFormat(format);
-
+		style.labelsFormat = format;
 		return this;
 	}
 
@@ -1489,6 +1487,9 @@ public abstract class ChartView extends RelativeLayout {
 
 		private int gridColumns;
 
+		/** Labels Metric to draw together with labels */
+		private DecimalFormat labelsFormat;
+
 
 		Style(Context context) {
 
@@ -1508,6 +1509,8 @@ public abstract class ChartView extends RelativeLayout {
 
 			gridRows = DEFAULT_GRID_OFF;
 			gridColumns = DEFAULT_GRID_OFF;
+
+			labelsFormat = new DecimalFormat();
 		}
 
 
@@ -1555,6 +1558,8 @@ public abstract class ChartView extends RelativeLayout {
 
 			gridRows = DEFAULT_GRID_OFF;
 			gridColumns = DEFAULT_GRID_OFF;
+
+			labelsFormat = new DecimalFormat();
 		}
 
 
@@ -1657,6 +1662,11 @@ public abstract class ChartView extends RelativeLayout {
 		public int getAxisTopSpacing(){
 
 			return axisTopSpacing;
+		}
+
+		public DecimalFormat getLabelsFormat(){
+
+			return labelsFormat;
 		}
 
 		private boolean hasHorizontalGrid(){

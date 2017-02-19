@@ -50,8 +50,10 @@ public class AxisRendererTest {
 	@Test
 	public void init_HandleValues_NoBordersAndNoStep() {
 
+		when(mStyleMock.getLabelsFormat()).thenReturn(new DecimalFormat());
+
 		mXRndr.setHandleValues(true);
-		mXRndr.init(mData, null);
+		mXRndr.init(mData, mStyleMock);
 
 		ArrayList<String> labels = mXRndr.labels;
 		assertEquals("0", labels.get(0));
@@ -63,9 +65,11 @@ public class AxisRendererTest {
 	@Test
 	public void init_HandleValues_NoBordersAndStep() {
 
+		when(mStyleMock.getLabelsFormat()).thenReturn(new DecimalFormat());
+
 		mXRndr.setHandleValues(true);
 		mXRndr.setStep(9);
-		mXRndr.init(mData, null);
+		mXRndr.init(mData, mStyleMock);
 
 		ArrayList<String> labels = mXRndr.labels;
 		assertEquals("0", labels.get(0));
@@ -76,9 +80,11 @@ public class AxisRendererTest {
 	@Test
 	public void init_HandleValues_BordersAndNoStep() {
 
+		when(mStyleMock.getLabelsFormat()).thenReturn(new DecimalFormat());
+
 		mXRndr.setHandleValues(true);
 		mXRndr.setBorderValues(0,9);
-		mXRndr.init(mData, null);
+		mXRndr.init(mData, mStyleMock);
 
 		assertEquals(3, mXRndr.getStep(), 0);
 	}
@@ -87,6 +93,7 @@ public class AxisRendererTest {
 	@Test
 	public void defineMandatoryBorderSpacing_Mandatory_Result() {
 
+		when(mStyleMock.getLabelsFormat()).thenReturn(new DecimalFormat());
 		when(mStyleMock.getAxisBorderSpacing()).thenReturn(1);
 
 		mXRndr.init(mData, mStyleMock);
@@ -101,6 +108,7 @@ public class AxisRendererTest {
 	@Test
 	public void defineMandatoryBorderSpacing_NotMandatory_Result() {
 
+		when(mStyleMock.getLabelsFormat()).thenReturn(new DecimalFormat());
 		when(mStyleMock.getAxisBorderSpacing()).thenReturn(1);
 
 		mXRndr.init(mData, mStyleMock);
@@ -115,6 +123,7 @@ public class AxisRendererTest {
 	@Test
 	public void defineLabelsPosition_Nominal_ScreenStep2() {
 
+		when(mStyleMock.getLabelsFormat()).thenReturn(new DecimalFormat());
 		when(mStyleMock.getAxisBorderSpacing()).thenReturn(1);
 
 		mXRndr.init(mData, mStyleMock);
@@ -128,6 +137,7 @@ public class AxisRendererTest {
 	@Test
 	public void defineLabelsPosition_Nominal_LabelsPos13() {
 
+		when(mStyleMock.getLabelsFormat()).thenReturn(new DecimalFormat());
 		when(mStyleMock.getAxisBorderSpacing()).thenReturn(1);
 
 		mXRndr.init(mData, mStyleMock);
