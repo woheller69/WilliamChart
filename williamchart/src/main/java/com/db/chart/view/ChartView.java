@@ -1352,9 +1352,9 @@ public abstract class ChartView extends RelativeLayout {
 	 *
 	 * @return {@link com.db.chart.view.ChartView} self-reference.
 	 */
-	public ChartView setAxisLabelsSpacing(float spacing) {
+	public ChartView setAxisLabelsSpacing(int spacing) {
 
-		style.distLabelToAxis = (int) spacing;
+		style.axisLabelsSpacing = spacing;
 		return this;
 	}
 
@@ -1447,7 +1447,7 @@ public abstract class ChartView extends RelativeLayout {
 		private int axisColor;
 
 		/** Distance between axis and label */
-		private int distLabelToAxis;
+		private int axisLabelsSpacing;
 
 		/** Spacing between axis labels and chart sides */
 		private int axisBorderSpacing;
@@ -1503,7 +1503,7 @@ public abstract class ChartView extends RelativeLayout {
 			labelsColor = DEFAULT_COLOR;
 			fontSize = context.getResources().getDimension(R.dimen.font_size);
 
-			distLabelToAxis = context.getResources().getDimensionPixelSize(R.dimen.axis_labels_spacing);
+			axisLabelsSpacing = context.getResources().getDimensionPixelSize(R.dimen.axis_labels_spacing);
 			axisBorderSpacing = context.getResources().getDimensionPixelSize(R.dimen.axis_border_spacing);
 			axisTopSpacing = context.getResources().getDimensionPixelSize(R.dimen.axis_top_spacing);
 
@@ -1549,7 +1549,7 @@ public abstract class ChartView extends RelativeLayout {
 			if (typefaceName != null) typeface = Typeface.createFromAsset(getResources().
 					  getAssets(), typefaceName);
 
-			distLabelToAxis = arr.getDimensionPixelSize(R.styleable.ChartAttrs_chart_axisLabelsSpacing,
+			axisLabelsSpacing = arr.getDimensionPixelSize(R.styleable.ChartAttrs_chart_axisLabelsSpacing,
 					  context.getResources().getDimensionPixelSize(R.dimen.axis_labels_spacing));
 			axisBorderSpacing = arr.getDimensionPixelSize(R.styleable.ChartAttrs_chart_axisBorderSpacing,
 					context.getResources().getDimensionPixelSize(R.dimen.axis_border_spacing));
@@ -1582,7 +1582,7 @@ public abstract class ChartView extends RelativeLayout {
 		}
 
 
-		public void clean() {
+		private void clean() {
 
 			chartPaint = null;
 			labelsPaint = null;
@@ -1603,69 +1603,51 @@ public abstract class ChartView extends RelativeLayout {
 			return rect.height();
 		}
 
-
 		public Paint getChartPaint() {
-
 			return chartPaint;
 		}
 
-
 		public float getAxisThickness() {
-
 			return axisThickness;
 		}
 
-
 		public boolean hasXAxis() {
-
 			return hasXAxis;
 		}
 
-
 		public boolean hasYAxis() {
-
 			return hasYAxis;
 		}
 
-
 		public Paint getLabelsPaint() {
-
 			return labelsPaint;
 		}
 
-
 		public int getFontMaxHeight() {
-
 			return fontMaxHeight;
 		}
 
 		public AxisRenderer.LabelPosition getXLabelsPositioning(){
-
 			return xLabelsPositioning;
 		}
 
 		public AxisRenderer.LabelPosition getYLabelsPositioning(){
-
 			return yLabelsPositioning;
 		}
 
 		public int getAxisLabelsSpacing(){
-
-			return distLabelToAxis;
+			return axisLabelsSpacing;
 		}
 
 		public int getAxisBorderSpacing(){
-
 			return axisBorderSpacing;
 		}
 
 		public int getAxisTopSpacing(){
-
 			return axisTopSpacing;
 		}
 
 		public DecimalFormat getLabelsFormat(){
-
 			return labelsFormat;
 		}
 
