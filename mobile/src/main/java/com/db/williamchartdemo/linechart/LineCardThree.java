@@ -44,16 +44,7 @@ public class LineCardThree extends CardController {
 							 null);
 		mChart.addData(dataset);
 
-		mChart.setBorderSpacing(1)
-				  .setXLabels(AxisRenderer.LabelPosition.NONE)
-				  .setYLabels(AxisRenderer.LabelPosition.NONE)
-				  .setXAxis(false)
-				  .setYAxis(false)
-				  .setBorderSpacing(Tools.fromDpToPx(5));
-
-		Animation anim = new Animation().withEndAction(action);
-
-		mChart.show(anim);
+		mChart.show(new Animation().withEndAction(action));
 	}
 
 

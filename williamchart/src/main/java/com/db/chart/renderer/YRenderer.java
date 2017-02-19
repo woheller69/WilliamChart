@@ -212,7 +212,7 @@ public class YRenderer extends AxisRenderer {
 	public float measureInnerChartBottom(int bottom) {
 
 		if (style.getYLabelsPositioning() != LabelPosition.NONE &&
-				  borderSpacing < style.getFontMaxHeight() / 2)
+				  style.getAxisBorderSpacing() < style.getFontMaxHeight() / 2)
 			return bottom - style.getFontMaxHeight() / 2;
 		return bottom;
 	}

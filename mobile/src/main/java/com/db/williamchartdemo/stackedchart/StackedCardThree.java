@@ -57,12 +57,7 @@ public class StackedCardThree extends CardController {
 		mChart.setRoundCorners(Tools.fromDpToPx(5));
 		mChart.setBarSpacing(Tools.fromDpToPx(5));
 
-		mChart.setBorderSpacing(Tools.fromDpToPx(5))
-				  .setYLabels(AxisRenderer.LabelPosition.NONE)
-				  .setXLabels(AxisRenderer.LabelPosition.NONE)
-				  .setXAxis(false)
-				  .setYAxis(false)
-				  .setAxisBorderValues(-80, 80, 10);
+		mChart.setAxisBorderValues(-80, 80, 10);
 
 		Animation anim = new Animation().setInterpolator(new DecelerateInterpolator()).withEndAction(action);
 

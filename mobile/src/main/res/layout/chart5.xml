@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:williamchart="http://schemas.android.com/apk/res-auto"
     android:id="@+id/chart_card"
     android:layout_width="match_parent"
     android:layout_height="175dp"
     android:layout_margin="@dimen/card_view_padding"
-    card_view:cardBackgroundColor="#ffffff"
-    card_view:cardCornerRadius="@dimen/card_view_roundcorner">
+    williamchart:cardBackgroundColor="#ffffff"
+    williamchart:cardCornerRadius="@dimen/card_view_roundcorner">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -64,7 +64,7 @@
                 android:textSize="12sp" />
         </RelativeLayout>
 
-        <com.db.chart.view.StackBarChartView xmlns:chart="http://schemas.android.com/apk/res-auto"
+        <com.db.chart.view.StackBarChartView
             android:id="@+id/chart"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -73,7 +73,8 @@
             android:paddingBottom="8dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            chart:chart_fontSize="10sp"
-            chart:chart_labelColor="#929b88" />
+            williamchart:chart_fontSize="10sp"
+            williamchart:chart_labelColor="#929b88"
+            williamchart:chart_axis="false"/>
     </RelativeLayout>
 </android.support.v7.widget.CardView>

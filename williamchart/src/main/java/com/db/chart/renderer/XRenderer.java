@@ -181,8 +181,8 @@ public class XRenderer extends AxisRenderer {
 
 		float rightBorder = 0;
 		if (style.getXLabelsPositioning() != LabelPosition.NONE &&
-				  borderSpacing + mandatoryBorderSpacing < lastLabelWidth / 2)
-			rightBorder = lastLabelWidth / 2 - (borderSpacing + mandatoryBorderSpacing);
+				  style.getAxisBorderSpacing() + mandatoryBorderSpacing < lastLabelWidth / 2)
+			rightBorder = lastLabelWidth / 2 - (style.getAxisBorderSpacing() + mandatoryBorderSpacing);
 
 		return right - rightBorder;
 	}

@@ -906,8 +906,7 @@ public abstract class ChartView extends RelativeLayout {
 	 */
 	float getBorderSpacing() {
 
-		if (mOrientation == Orientation.VERTICAL) return xRndr.getBorderSpacing();
-		else return yRndr.getBorderSpacing();
+		return style.axisBorderSpacing;
 	}
 
 
@@ -1218,11 +1217,9 @@ public abstract class ChartView extends RelativeLayout {
 	 *
 	 * @return {@link com.db.chart.view.ChartView} self-reference.
 	 */
-	public ChartView setBorderSpacing(float spacing) {
+	public ChartView setBorderSpacing(int spacing) {
 
-		if (mOrientation == Orientation.VERTICAL) xRndr.setBorderSpacing(spacing);
-		else yRndr.setBorderSpacing(spacing);
-
+		style.axisBorderSpacing = spacing;
 		return this;
 	}
 
@@ -1232,11 +1229,9 @@ public abstract class ChartView extends RelativeLayout {
 	 *
 	 * @return {@link com.db.chart.view.ChartView} self-reference.
 	 */
-	public ChartView setTopSpacing(float spacing) {
+	public ChartView setTopSpacing(int spacing) {
 
-		if (mOrientation == Orientation.VERTICAL) yRndr.setTopSpacing(spacing);
-		else xRndr.setBorderSpacing(spacing);
-
+		style.axisTopSpacing = spacing;
 		return this;
 	}
 
@@ -1456,6 +1451,12 @@ public abstract class ChartView extends RelativeLayout {
 		/** Distance between axis and label */
 		private int distLabelToAxis;
 
+		/** Spacing between axis labels and chart sides */
+		private int axisBorderSpacing;
+
+		/** Spacing between chart top and axis label */
+		private int axisTopSpacing;
+
 		/** Grid */
 		private Paint gridPaint;
 
@@ -1501,7 +1502,9 @@ public abstract class ChartView extends RelativeLayout {
 			labelsColor = DEFAULT_COLOR;
 			fontSize = context.getResources().getDimension(R.dimen.font_size);
 
-			distLabelToAxis = (int) context.getResources().getDimension(R.dimen.axis_labels_spacing);
+			distLabelToAxis = context.getResources().getDimensionPixelSize(R.dimen.axis_labels_spacing);
+			axisBorderSpacing = context.getResources().getDimensionPixelSize(R.dimen.axis_border_spacing);
+			axisTopSpacing = context.getResources().getDimensionPixelSize(R.dimen.axis_top_spacing);
 
 			gridRows = DEFAULT_GRID_OFF;
 			gridColumns = DEFAULT_GRID_OFF;
@@ -1545,6 +1548,10 @@ public abstract class ChartView extends RelativeLayout {
 
 			distLabelToAxis = arr.getDimensionPixelSize(R.styleable.ChartAttrs_chart_axisLabelsSpacing,
 					  context.getResources().getDimensionPixelSize(R.dimen.axis_labels_spacing));
+			axisBorderSpacing = arr.getDimensionPixelSize(R.styleable.ChartAttrs_chart_axisBorderSpacing,
+					context.getResources().getDimensionPixelSize(R.dimen.axis_border_spacing));
+			axisTopSpacing = arr.getDimensionPixelSize(R.styleable.ChartAttrs_chart_axisTopSpacing,
+					context.getResources().getDimensionPixelSize(R.dimen.axis_top_spacing));
 
 			gridRows = DEFAULT_GRID_OFF;
 			gridColumns = DEFAULT_GRID_OFF;
@@ -1640,6 +1647,16 @@ public abstract class ChartView extends RelativeLayout {
 		public int getAxisLabelsSpacing(){
 
 			return distLabelToAxis;
+		}
+
+		public int getAxisBorderSpacing(){
+
+			return axisBorderSpacing;
+		}
+
+		public int getAxisTopSpacing(){
+
+			return axisTopSpacing;
 		}
 
 		private boolean hasHorizontalGrid(){

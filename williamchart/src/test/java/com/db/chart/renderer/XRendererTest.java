@@ -129,11 +129,11 @@ public class XRendererTest {
 
 		when(mStyleMock.getXLabelsPositioning()).thenReturn(AxisRenderer.LabelPosition.OUTSIDE);
 		when(mStyleMock.getLabelsPaint()).thenReturn(mMockPaint);
+		when(mStyleMock.getAxisBorderSpacing()).thenReturn(1);
 		when(mMockPaint.measureText("1")).thenReturn(6.f);
 
 		mXRndr.init(mData, mStyleMock);
 		mXRndr.setMandatoryBorderSpacing(true);
-		mXRndr.setBorderSpacing(1);
 
 		assertEquals(5.f, mXRndr.measureInnerChartRight(6), RESULT_THRESHOLD);
 	}

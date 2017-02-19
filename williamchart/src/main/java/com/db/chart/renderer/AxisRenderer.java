@@ -67,12 +67,6 @@ public abstract class AxisRenderer {
 	/** Starting X point of the axis */
 	float axisPosition;
 
-	/** Spacing for top label */
-	private float topSpacing;
-
-	/** Horizontal border spacing for labels */
-	float borderSpacing;
-
 	/** Mandatory horizontal border when necessary (ex: BarCharts) */
 	float mandatoryBorderSpacing;
 
@@ -183,8 +177,6 @@ public abstract class AxisRenderer {
 	public void reset() {
 
 		mandatoryBorderSpacing = 0;
-		borderSpacing = 0;
-		topSpacing = 0;
 		step = -1;
 		labelsStaticPos = 0;
 		labelFormat = new DecimalFormat();
@@ -204,7 +196,7 @@ public abstract class AxisRenderer {
 	void defineMandatoryBorderSpacing(float innerStart, float innerEnd) {
 
 		if (mandatoryBorderSpacing == 1)
-			mandatoryBorderSpacing = (innerEnd - innerStart - borderSpacing * 2) / nLabels / 2;
+			mandatoryBorderSpacing = (innerEnd - innerStart - style.getAxisBorderSpacing() * 2) / nLabels / 2;
 	}
 
 
@@ -218,12 +210,12 @@ public abstract class AxisRenderer {
 
 		screenStep = (innerEnd -
 				  innerStart -
-				  topSpacing -
-				  borderSpacing * 2 -
+				  style.getAxisTopSpacing() -
+				  style.getAxisBorderSpacing() * 2 -
 				  mandatoryBorderSpacing * 2) / (nLabels - 1);
 
 		labelsPos = new ArrayList<>(nLabels);
-		float currPos = innerStart + borderSpacing + mandatoryBorderSpacing;
+		float currPos = innerStart + style.getAxisBorderSpacing() + mandatoryBorderSpacing;
 		for (int i = 0; i < nLabels; i++) {
 			labelsPos.add(currPos);
 			currPos += screenStep;
@@ -410,17 +402,6 @@ public abstract class AxisRenderer {
 
 
 	/**
-	 * Get axis border spacing, meaning space between chart area limit and side labels.
-	 *
-	 * @return Axis border spacing.
-	 */
-	public float getBorderSpacing() {
-
-		return borderSpacing;
-	}
-
-
-	/**
 	 * @return Axis maximum border value.
 	 */
 	public float getBorderMaximumValue() {
@@ -488,28 +469,6 @@ public abstract class AxisRenderer {
 	public void setStep(int step) {
 
 		this.step = step;
-	}
-
-
-	/**
-	 * Set axis border spacing, meaning space between chart area limit and side labels.
-	 *
-	 * @param spacing Axis border spacing.
-	 */
-	public void setBorderSpacing(float spacing) {
-
-		borderSpacing = spacing;
-	}
-
-
-	/**
-	 * Set top border spacing, meaning space between top chart area limit and first top label.
-	 *
-	 * @param spacing Top axis border spacing.
-	 */
-	public void setTopSpacing(float spacing) {
-
-		topSpacing = spacing;
 	}
 
 

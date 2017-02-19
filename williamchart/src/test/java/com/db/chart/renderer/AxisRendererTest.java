@@ -5,10 +5,12 @@ import android.test.suitebuilder.annotation.MediumTest;
 import com.db.chart.model.Bar;
 import com.db.chart.model.BarSet;
 import com.db.chart.model.ChartSet;
+import com.db.chart.view.ChartView;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.text.DecimalFormat;
@@ -18,11 +20,15 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 
 @RunWith(MockitoJUnitRunner.class)
 @MediumTest
 public class AxisRendererTest {
+
+	@Mock
+	ChartView.Style mStyleMock;
 
 	private XRenderer mXRndr;
 
@@ -81,9 +87,10 @@ public class AxisRendererTest {
 	@Test
 	public void defineMandatoryBorderSpacing_Mandatory_Result() {
 
-		mXRndr.init(mData, null);
+		when(mStyleMock.getAxisBorderSpacing()).thenReturn(1);
+
+		mXRndr.init(mData, mStyleMock);
 		mXRndr.setMandatoryBorderSpacing(true);
-		mXRndr.setBorderSpacing(1.f);
 
 		mXRndr.defineMandatoryBorderSpacing(0, 4);
 
@@ -94,9 +101,10 @@ public class AxisRendererTest {
 	@Test
 	public void defineMandatoryBorderSpacing_NotMandatory_Result() {
 
-		mXRndr.init(mData, null);
+		when(mStyleMock.getAxisBorderSpacing()).thenReturn(1);
+
+		mXRndr.init(mData, mStyleMock);
 		mXRndr.setMandatoryBorderSpacing(false);
-		mXRndr.setBorderSpacing(1.f);
 
 		mXRndr.defineMandatoryBorderSpacing(0, 4);
 
@@ -107,8 +115,9 @@ public class AxisRendererTest {
 	@Test
 	public void defineLabelsPosition_Nominal_ScreenStep2() {
 
-		mXRndr.init(mData, null);
-		mXRndr.setBorderSpacing(1.f);
+		when(mStyleMock.getAxisBorderSpacing()).thenReturn(1);
+
+		mXRndr.init(mData, mStyleMock);
 
 		mXRndr.defineLabelsPosition(0, 4);
 
@@ -119,8 +128,9 @@ public class AxisRendererTest {
 	@Test
 	public void defineLabelsPosition_Nominal_LabelsPos13() {
 
-		mXRndr.init(mData, null);
-		mXRndr.setBorderSpacing(1.f);
+		when(mStyleMock.getAxisBorderSpacing()).thenReturn(1);
+
+		mXRndr.init(mData, mStyleMock);
 
 		mXRndr.defineLabelsPosition(0, 4);
 

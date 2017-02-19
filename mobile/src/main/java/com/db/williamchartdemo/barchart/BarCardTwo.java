@@ -123,11 +123,7 @@ public class BarCardTwo extends CardController {
 		mChart.addData(barSet);
 		mChart.setBarSpacing(Tools.fromDpToPx(4));
 
-		mChart.setBorderSpacing(0)
-				  .setXAxis(false)
-				  .setYAxis(false)
-				  .setLabelsColor(Color.parseColor("#FF8E8A84"))
-				  .setXLabels(XRenderer.LabelPosition.NONE);
+		mChart.setXLabels(XRenderer.LabelPosition.NONE);
 
 		int[] order = {4, 3, 2, 1, 0};
 		mChart.show(new Animation().inSequence(.5f, order).withEndAction(action));

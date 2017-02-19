@@ -57,15 +57,12 @@ public class StackedCardTwo extends CardController {
 
 		mChart.setBarSpacing(Tools.fromDpToPx(10));
 
-		mChart.setBorderSpacing(0)
-				  .setStep(1)
-				  .setGrid(0, 10, gridPaint)
-				  .setXAxis(false)
-				  .setYAxis(false)
-				  .setLabelsFormat(new DecimalFormat("##'M'"))
-				  .show(new Animation().setDuration(2500)
-							 .setInterpolator(new AccelerateInterpolator())
-							 .withEndAction(action));
+		mChart.setStep(1)
+				.setGrid(0, 10, gridPaint)
+				.setLabelsFormat(new DecimalFormat("##'M'"))
+				.show(new Animation().setDuration(2500)
+						.setInterpolator(new AccelerateInterpolator())
+						.withEndAction(action));
 	}
 
 

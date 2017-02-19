@@ -8,6 +8,10 @@
 
     <dimen name="axis_labels_spacing">5dp</dimen>
 
+    <dimen name="axis_border_spacing">0dp</dimen>
+
+    <dimen name="axis_top_spacing">0dp</dimen>
+
     <!-- Text Labels size -->
 	<dimen name="font_size">10dp</dimen>    
     

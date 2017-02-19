@@ -97,12 +97,8 @@ public class LineCardOne extends CardController {
 		mChart.addData(dataset);
 
 		// Chart
-		mChart.setBorderSpacing(Tools.fromDpToPx(15))
-				  .setAxisBorderValues(0, 20)
-				  .setYLabels(AxisRenderer.LabelPosition.NONE)
-				  .setLabelsColor(Color.parseColor("#6a84c3"))
-				  .setXAxis(false)
-				  .setYAxis(false);
+		mChart.setAxisBorderValues(0, 20)
+				.setYLabels(AxisRenderer.LabelPosition.NONE);
 
 		mBaseAction = action;
 		Runnable chartAction = new Runnable() {

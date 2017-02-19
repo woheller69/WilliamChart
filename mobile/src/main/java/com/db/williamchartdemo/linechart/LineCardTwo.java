@@ -74,12 +74,8 @@ public class LineCardTwo extends CardController {
 		gridPaint.setAntiAlias(true);
 		gridPaint.setStrokeWidth(Tools.fromDpToPx(.75f));
 
-		mChart.setBorderSpacing(Tools.fromDpToPx(0))
-				  .setXLabels(AxisRenderer.LabelPosition.OUTSIDE)
-				  .setLabelsColor(Color.parseColor("#304a00"))
+		mChart.setXLabels(AxisRenderer.LabelPosition.OUTSIDE)
 				  .setYLabels(AxisRenderer.LabelPosition.NONE)
-				  .setXAxis(false)
-				  .setYAxis(false)
 				  .setGrid(0, 7, gridPaint)
 				  .setValueThreshold(80f, 80f, thresPaint)
 				  .setAxisBorderValues(0, 110);

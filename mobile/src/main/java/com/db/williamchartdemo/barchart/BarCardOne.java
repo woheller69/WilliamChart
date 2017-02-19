@@ -53,12 +53,8 @@ public class BarCardOne extends CardController {
 		mChart.setBarBackgroundColor(Color.parseColor("#592932"));
 
 		// Chart
-		mChart.setXAxis(false)
-				  .setYAxis(false)
-				  .setXLabels(XRenderer.LabelPosition.OUTSIDE)
-				  .setYLabels(YRenderer.LabelPosition.NONE)
-				  .setLabelsColor(Color.parseColor("#86705c"))
-				  .setAxisColor(Color.parseColor("#86705c"));
+		mChart.setXLabels(XRenderer.LabelPosition.OUTSIDE)
+				  .setYLabels(YRenderer.LabelPosition.NONE);
 
 		int[] order = {1, 0, 2, 3};
 		final Runnable auxAction = action;

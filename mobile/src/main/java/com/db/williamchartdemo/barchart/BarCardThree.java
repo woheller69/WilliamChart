@@ -72,14 +72,8 @@ public class BarCardThree extends CardController {
 
 		mChart.setBarSpacing(Tools.fromDpToPx(1.5f));
 
-		mChart.setXLabels(AxisRenderer.LabelPosition.NONE)
-				  .setYLabels(AxisRenderer.LabelPosition.NONE)
-				  .setXAxis(false)
-				  .setYAxis(false);
-
-		Animation anim = new Animation().setInterpolator(new AccelerateDecelerateInterpolator()).withEndAction(action);
-
-		mChart.show(anim);
+		mChart.show(new Animation().setInterpolator(new AccelerateDecelerateInterpolator())
+				.withEndAction(action));
 	}
 
 
