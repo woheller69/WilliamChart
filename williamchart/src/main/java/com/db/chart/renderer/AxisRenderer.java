@@ -46,9 +46,6 @@ public abstract class AxisRenderer {
 	/** Refers to the coordinate X in case of Axis Y and coordinate Y in case of Axis X */
 	float labelsStaticPos;
 
-	/** Number of labels */
-	int nLabels;
-
 	/** Maximum value of labels */
 	private float maxLabelValue;
 
@@ -108,7 +105,6 @@ public abstract class AxisRenderer {
 		} else {
 			labels = extractLabels(data);
 		}
-		nLabels = labels.size();
 		this.style = style;
 	}
 
@@ -192,7 +188,8 @@ public abstract class AxisRenderer {
 	void defineMandatoryBorderSpacing(float innerStart, float innerEnd) {
 
 		if (mandatoryBorderSpacing == 1)
-			mandatoryBorderSpacing = (innerEnd - innerStart - style.getAxisBorderSpacing() * 2) / nLabels / 2;
+			mandatoryBorderSpacing = (innerEnd - innerStart - style.getAxisBorderSpacing() * 2)
+					  / labels.size() / 2;
 	}
 
 
@@ -204,6 +201,7 @@ public abstract class AxisRenderer {
 	 */
 	void defineLabelsPosition(float innerStart, float innerEnd) {
 
+		int nLabels = labels.size();
 		screenStep = (innerEnd -
 				  innerStart -
 				  style.getAxisTopSpacing() -

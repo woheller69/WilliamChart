@@ -107,6 +107,7 @@ public class XRenderer extends AxisRenderer {
 		if (style.getXLabelsPositioning() != LabelPosition.NONE) {
 			style.getLabelsPaint().setTextAlign(Align.CENTER);
 
+			int nLabels = labels.size();
 			for (int i = 0; i < nLabels; i++) {
 				canvas.drawText(labels.get(i), labelsPos.get(i), labelsStaticPos,
 						  style.getLabelsPaint());
@@ -177,7 +178,7 @@ public class XRenderer extends AxisRenderer {
 		// To manage horizontal width of the last axis label
 		float lastLabelWidth = 0;
 		// to fix possible crash on trying to access label by index -1.
-		if (nLabels > 0) lastLabelWidth = style.getLabelsPaint().measureText(labels.get(nLabels - 1));
+		if (labels.size() > 0) lastLabelWidth = style.getLabelsPaint().measureText(labels.get(labels.size() - 1));
 
 		float rightBorder = 0;
 		if (style.getXLabelsPositioning() != LabelPosition.NONE &&

@@ -109,6 +109,7 @@ public class YRenderer extends AxisRenderer {
 											Align.LEFT);
 
 			// Draw labels
+			int nLabels = labels.size();
 			for (int i = 0; i < nLabels; i++) {
 				canvas.drawText(labels.get(i), labelsStaticPos,
 						  labelsPos.get(i) + style.getLabelHeight(labels.get(i)) / 2,
