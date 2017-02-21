@@ -534,12 +534,12 @@ public abstract class ChartView extends RelativeLayout {
 		if (mAnim != null && mAnim.isPlaying()) mAnim.cancel();
 
 		init();
-		if (xRndr.hasMandatoryBorderSpacing()) xRndr.reset();
-		if (yRndr.hasMandatoryBorderSpacing()) yRndr.reset();
+		xRndr.reset();
+		yRndr.reset();
+		setOrientation(mOrientation);
 
 		style.labelThresPaint = null;
 		style.valueThresPaint = null;
-
 		style.gridPaint = null;
 	}
 
