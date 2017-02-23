@@ -39,14 +39,12 @@ public class LineSet extends ChartSet {
 
     private static final String TAG = "chart.model.LineSet";
 
-
     /**
      * Defaults
      */
     private static final int DEFAULT_COLOR = -16777216;
 
     private static final float LINE_THICKNESS = 4;
-
 
     /**
      * Line variables
@@ -55,7 +53,6 @@ public class LineSet extends ChartSet {
 
     private int mColor;
 
-
     /**
      * Line type
      */
@@ -63,14 +60,12 @@ public class LineSet extends ChartSet {
 
     private boolean mIsSmooth;
 
-
     /**
      * Background fill variables
      */
     private boolean mHasFill;
 
     private int mFillColor;
-
 
     /**
      * Gradient background fill variables
@@ -81,7 +76,6 @@ public class LineSet extends ChartSet {
 
     private float[] mGradientPositions;
 
-
     /**
      * Index where set begins/ends
      */
@@ -89,17 +83,10 @@ public class LineSet extends ChartSet {
 
     private int mEnd;
 
-
     /**
      * Intervals to apply in dashness
      */
     private float[] mDashedIntervals;
-
-    /**
-     * Phase of the line (useful for animations)
-     */
-    private int mDashedPhase;
-
 
     /**
      * Shadow variables
@@ -142,7 +129,6 @@ public class LineSet extends ChartSet {
 
         mIsDashed = false;
         mDashedIntervals = null;
-        mDashedPhase = 0;
 
         mIsSmooth = false;
 
@@ -384,17 +370,7 @@ public class LineSet extends ChartSet {
      */
     public int getDashedPhase() {
 
-        return mDashedPhase;
-    }
-
-    /**
-     * @param phase dash phase
-     * @return {@link com.db.chart.model.LineSet} self-reference.
-     */
-    public LineSet setDashedPhase(int phase) {
-
-        mDashedPhase = phase;
-        return this;
+        return 0;
     }
 
     public float getShadowRadius() {

@@ -39,7 +39,6 @@ import android.widget.RelativeLayout;
 
 import com.db.chart.animation.Animation;
 import com.db.chart.animation.ChartAnimationListener;
-import com.db.chart.animation.style.BaseStyleAnimation;
 import com.db.chart.listener.OnEntryClickListener;
 import com.db.chart.model.ChartEntry;
 import com.db.chart.model.ChartSet;
@@ -717,18 +716,6 @@ public abstract class ChartView extends RelativeLayout {
 
         this.removeAllViews();
         if (mTooltip != null) mTooltip.setOn(false);
-    }
-
-
-    /**
-     * Animate {@link ChartSet}.
-     *
-     * @param index Position of {@link ChartSet}
-     * @param anim  Animation extending {@link BaseStyleAnimation}
-     */
-    public void animateSet(int index, BaseStyleAnimation anim) {
-
-        anim.play(this, this.data.get(index));
     }
 
 
