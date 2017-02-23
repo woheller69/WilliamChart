@@ -154,7 +154,13 @@ public abstract class AxisRenderer {
      * @param right  right position of chart
      * @param bottom bottom position of chart
      */
-    protected abstract void measure(int left, int top, int right, int bottom);
+    public void measure(int left, int top, int right, int bottom) {
+
+        mInnerChartLeft = measureInnerChartLeft(left);
+        mInnerChartTop = measureInnerChartTop(top);
+        mInnerChartRight = measureInnerChartRight(right);
+        mInnerChartBottom = measureInnerChartBottom(bottom);
+    }
 
 
     /**
@@ -193,6 +199,50 @@ public abstract class AxisRenderer {
      * @return Display's coordinate
      */
     public abstract float parsePos(int index, double value);
+
+
+    /**
+     * Measure the necessary padding from the chart left border defining the
+     * coordinate of the inner chart left border. Inner Chart refers only to the
+     * area where chart data will be draw, excluding labels, axis, etc.
+     *
+     * @param left Left position of chart area
+     * @return Coordinate of the inner left side of the chart
+     */
+    protected abstract float measureInnerChartLeft(int left);
+
+
+    /**
+     * Measure the necessary padding from the chart left border defining the
+     * coordinate of the inner chart top border. Inner Chart refers only to the
+     * area where chart data will be draw, excluding labels, axis, etc.
+     *
+     * @param top Top position of chart area
+     * @return Coordinate of the inner top side of the chart
+     */
+    protected abstract float measureInnerChartTop(int top);
+
+
+    /**
+     * Measure the necessary padding from the chart left border defining the
+     * coordinate of the inner chart right border. Inner Chart refers only to the
+     * area where chart data will be draw, excluding labels, axis, etc.
+     *
+     * @param right Right position of chart area
+     * @return Coordinate of the inner right side of the chart
+     */
+    protected abstract float measureInnerChartRight(int right);
+
+
+    /**
+     * Measure the necessary padding from the chart left border defining the
+     * coordinate of the inner chart bottom border. Inner Chart refers only to the
+     * area where chart data will be draw, excluding labels, axis, etc.
+     *
+     * @param bottom Bottom position of chart area
+     * @return Coordinate of the inner bottom side of the chart
+     */
+    protected abstract float measureInnerChartBottom(int bottom);
 
 
     /**
