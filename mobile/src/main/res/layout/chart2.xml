@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:williamchart="http://schemas.android.com/apk/res-auto"
     android:id="@+id/chart_card"
     android:layout_width="match_parent"
@@ -51,11 +50,11 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="-15dp"
+            williamchart:chart_axis="false"
             williamchart:chart_axisBorderSpacing="0dp"
             williamchart:chart_axisColor="#30547d99"
-            williamchart:chart_typeface="OpenSans-Regular.ttf"
             williamchart:chart_labelColor="#304a00"
             williamchart:chart_labels="none"
-            williamchart:chart_axis="false"/>
+            williamchart:chart_typeface="OpenSans-Regular.ttf" />
     </RelativeLayout>
 </android.support.v7.widget.CardView>

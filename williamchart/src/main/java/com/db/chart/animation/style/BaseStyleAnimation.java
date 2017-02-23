@@ -20,42 +20,63 @@ import com.db.chart.model.ChartSet;
 import com.db.chart.view.ChartView;
 
 
+/**
+ * BaseStyleAnimation
+ */
 public abstract class BaseStyleAnimation {
 
-	private static final long DELAY_BETWEEN_UPDATES = 100;
+    private static final long DELAY_BETWEEN_UPDATES = 100;
 
-	private ChartView mChartView;
+    private ChartView mChartView;
 
-	private ChartSet mSet;
+    private ChartSet mSet;
 
-	/** Control animation updates */
-	final private Runnable mAnimator = new Runnable() {
-		@Override
-		public void run() {
+    /**
+     * Control animation updates
+     */
+    private final Runnable mAnimator = new Runnable() {
+        @Override
+        public void run() {
 
-			if (mChartView.canIPleaseAskYouToDraw()) {
-				mChartView.postInvalidate();
-				getUpdate(mSet);
-			}
-		}
-	};
-
-
-	public void play(ChartView lineChartView, ChartSet set) {
-
-		mChartView = lineChartView;
-		mSet = set;
-		getUpdate(mSet);
-	}
+            if (mChartView.canIPleaseAskYouToDraw()) {
+                mChartView.postInvalidate();
+                getUpdate(mSet);
+            }
+        }
+    };
 
 
-	private void getUpdate(ChartSet set) {
+    /**
+     * Starts playing animation
+     *
+     * @param lineChartView which chart
+     * @param set           which set
+     */
+    public void play(ChartView lineChartView, ChartSet set) {
 
-		nextUpdate(set);
-		mChartView.postDelayed(mAnimator, DELAY_BETWEEN_UPDATES);
-	}
+        mChartView = lineChartView;
+        mSet = set;
+        getUpdate(mSet);
+    }
 
 
-	protected abstract void nextUpdate(ChartSet set);
+    /**
+     * getUpdate
+     *
+     * @param set set being animated
+     */
+    private void getUpdate(ChartSet set) {
+
+        nextUpdate(set);
+        mChartView.postDelayed(mAnimator, DELAY_BETWEEN_UPDATES);
+    }
+
+
+    /**
+     * nextUpdate
+     *
+     * @param set set being animated
+     */
+    protected abstract void nextUpdate(ChartSet set);
 
 }

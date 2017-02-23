@@ -31,100 +31,100 @@ import static org.mockito.Mockito.when;
 @MediumTest
 public class ChartViewTest {
 
-	@Mock
-	private XRenderer mMockXRndr;
+    @Mock
+    private XRenderer mMockXRndr;
 
-	@Mock
-	private YRenderer mMockYRndr;
+    @Mock
+    private YRenderer mMockYRndr;
 
-	@Mock
-	private Context mMockContext;
+    @Mock
+    private Context mMockContext;
 
-	@Mock
-	private Resources mMockResources;
+    @Mock
+    private Resources mMockResources;
 
-	@Mock
-	private MotionEvent mMockMotionEvent;
+    @Mock
+    private MotionEvent mMockMotionEvent;
 
-	@Mock
-	private Region mMockRegion;
+    @Mock
+    private Region mMockRegion;
 
-	@Mock
-	private OnEntryClickListener mMockEntryListener;
+    @Mock
+    private OnEntryClickListener mMockEntryListener;
 
-	@Mock
-	private View.OnClickListener mMockChartListener;
+    @Mock
+    private View.OnClickListener mMockChartListener;
 
-	private LineChartView mChartView;
+    private LineChartView mChartView;
 
-	private ArrayList<ChartSet> mData;
-
-
-	@Before
-	public void setUp() {
-
-		when(mMockContext.getResources()).thenReturn(mMockResources);
-		when(mMockResources.getDimension(0)).thenReturn(6.f);
-
-		mChartView = new LineChartView(mMockContext);
-		BarSet set = new BarSet();
-		for (int i = 0; i < 2; i++)
-			set.addBar(new Bar(Integer.toString(i), (float) i));
-		mData = new ArrayList<>();
-		mData.add(set);
-	}
+    private ArrayList<ChartSet> mData;
 
 
-	@Test(expected = NullPointerException.class)
-	public void addData_NullSet_ThrowIllegalArgumentException() {
+    @Before
+    public void setUp() {
 
-		BarSet set = null;
-		mChartView.addData(set);
-	}
+        when(mMockContext.getResources()).thenReturn(mMockResources);
+        when(mMockResources.getDimension(0)).thenReturn(6.f);
 
-
-	@Test(expected = IllegalArgumentException.class)
-	public void addData_LesserEntriesSize_ThrowIllegalArgumentException() {
-
-		mChartView.addData(mData);
-		BarSet set1 = new BarSet();
-		set1.addBar(new Bar("3", 1.f));
-		mChartView.addData(set1);
-	}
+        mChartView = new LineChartView(mMockContext);
+        BarSet set = new BarSet();
+        for (int i = 0; i < 2; i++)
+            set.addBar(new Bar(Integer.toString(i), (float) i));
+        mData = new ArrayList<>();
+        mData.add(set);
+    }
 
 
-	@Test
-	public void updateValues_Nominal_Result() {
+    @Test(expected = NullPointerException.class)
+    public void addData_NullSet_ThrowIllegalArgumentException() {
 
-		mChartView.addData(mData);
-		mChartView.updateValues(0, new float[] {10, 20});
-
-		assertEquals(10, mChartView.getData().get(0).getEntry(0).getValue(), 0.f);
-		assertEquals(20, mChartView.getData().get(0).getEntry(1).getValue(), 0.f);
-	}
+        BarSet set = null;
+        mChartView.addData(set);
+    }
 
 
-	@Test(expected = IllegalArgumentException.class)
-	public void updateValues_LesserValues_ThrowIllegalArgumentException() {
+    @Test(expected = IllegalArgumentException.class)
+    public void addData_LesserEntriesSize_ThrowIllegalArgumentException() {
 
-		mChartView.addData(mData);
-		mChartView.updateValues(0, new float[] {10});
-	}
-
-
-	@Test
-	public void negotiateInnerChartBounds_Nominal_InnerB() {
-
-		assertArrayEquals(new float[] {2, 2, 11, 11},
-				  mChartView.negotiateInnerChartBounds(new float[] {1, 1, 12, 12},
-							 new float[] {2, 2, 11, 11}), 0.f);
-	}
+        mChartView.addData(mData);
+        BarSet set1 = new BarSet();
+        set1.addBar(new Bar("3", 1.f));
+        mChartView.addData(set1);
+    }
 
 
-	@SuppressWarnings("Range")
-	@Test(expected = IllegalArgumentException.class)
-	public void setGrid_RowsSmallerZero_ThrowIllegalArgException() {
+    @Test
+    public void updateValues_Nominal_Result() {
 
-		mChartView.setGrid(-1, -1, null);
-	}
+        mChartView.addData(mData);
+        mChartView.updateValues(0, new float[]{10, 20});
+
+        assertEquals(10, mChartView.getData().get(0).getEntry(0).getValue(), 0.f);
+        assertEquals(20, mChartView.getData().get(0).getEntry(1).getValue(), 0.f);
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void updateValues_LesserValues_ThrowIllegalArgumentException() {
+
+        mChartView.addData(mData);
+        mChartView.updateValues(0, new float[]{10});
+    }
+
+
+    @Test
+    public void negotiateInnerChartBounds_Nominal_InnerB() {
+
+        assertArrayEquals(new float[]{2, 2, 11, 11},
+                mChartView.negotiateInnerChartBounds(new float[]{1, 1, 12, 12},
+                        new float[]{2, 2, 11, 11}), 0.f);
+    }
+
+
+    @SuppressWarnings("Range")
+    @Test(expected = IllegalArgumentException.class)
+    public void setGrid_RowsSmallerZero_ThrowIllegalArgException() {
+
+        mChartView.setGrid(-1, -1, null);
+    }
 }

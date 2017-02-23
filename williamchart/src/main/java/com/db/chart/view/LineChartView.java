@@ -43,354 +43,341 @@ import java.util.ArrayList;
  */
 public class LineChartView extends ChartView {
 
+    private static final float SMOOTH_FACTOR = 0.15f;
 
-	/** Style applied to line chart */
-	final private Style mStyle;
+    /**
+     * Style applied to line chart
+     */
+    private final Style mStyle;
 
-	/** Radius clickable region */
-	private float mClickableRadius;
+    /**
+     * Radius clickable region
+     */
+    private float mClickableRadius;
 
 
-	public LineChartView(Context context, AttributeSet attrs) {
+    public LineChartView(Context context, AttributeSet attrs) {
 
-		super(context, attrs);
+        super(context, attrs);
 
-		setOrientation(Orientation.VERTICAL);
-		mStyle = new Style(
-				  context.getTheme().obtainStyledAttributes(attrs, R.styleable.ChartAttrs, 0, 0));
-		mClickableRadius = context.getResources().getDimension(R.dimen.dot_region_radius);
-	}
+        setOrientation(Orientation.VERTICAL);
+        mStyle = new Style(
+                context.getTheme().obtainStyledAttributes(attrs, R.styleable.ChartAttrs, 0, 0));
+        mClickableRadius = context.getResources().getDimension(R.dimen.dot_region_radius);
+    }
 
 
-	public LineChartView(Context context) {
+    public LineChartView(Context context) {
 
-		super(context);
+        super(context);
 
-		setOrientation(Orientation.VERTICAL);
-		mStyle = new Style();
-		mClickableRadius = context.getResources().getDimension(R.dimen.dot_region_radius);
-	}
+        setOrientation(Orientation.VERTICAL);
+        mStyle = new Style();
+        mClickableRadius = context.getResources().getDimension(R.dimen.dot_region_radius);
+    }
 
 
-	/**
-	 * Credits: http://www.jayway.com/author/andersericsson/
-	 * Given an index in points, it will make sure the the returned index is
-	 * within the array.
-	 */
-	private static int si(int setSize, int i) {
+    /**
+     * Credits: http://www.jayway.com/author/andersericsson/
+     * Given an index in points, it will make sure the the returned index is
+     * within the array.
+     */
+    private static int si(int setSize, int i) {
 
-		if (i > setSize - 1) return setSize - 1;
-		else if (i < 0) return 0;
-		return i;
-	}
+        if (i > setSize - 1) return setSize - 1;
+        else if (i < 0) return 0;
+        return i;
+    }
 
+    @Override
+    public void onAttachedToWindow() {
 
-	@Override
-	public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        mStyle.init();
+    }
 
-		super.onAttachedToWindow();
-		mStyle.init();
-	}
+    @Override
+    public void onDetachedFromWindow() {
 
+        super.onDetachedFromWindow();
+        mStyle.clean();
+    }
 
-	@Override
-	public void onDetachedFromWindow() {
+    @Override
+    public void onDrawChart(Canvas canvas, ArrayList<ChartSet> data) {
 
-		super.onDetachedFromWindow();
-		mStyle.clean();
-	}
+        LineSet lineSet;
+        Path linePath;
 
+        for (ChartSet set : data) {
 
-	/**
-	 * Method responsible to draw a line with the parsed screen points.
-	 *
-	 * @param canvas The canvas to draw on.
-	 */
-	@Override
-	public void onDrawChart(Canvas canvas, ArrayList<ChartSet> data) {
+            lineSet = (LineSet) set;
 
-		LineSet lineSet;
-		Path linePath;
+            if (lineSet.isVisible()) {
 
-		for (ChartSet set : data) {
+                mStyle.mLinePaint.setColor(lineSet.getColor());
+                mStyle.mLinePaint.setStrokeWidth(lineSet.getThickness());
+                applyShadow(mStyle.mLinePaint, lineSet.getAlpha(), lineSet.getShadowDx(), lineSet
+                        .getShadowDy(), lineSet.getShadowRadius(), lineSet.getShadowColor());
 
-			lineSet = (LineSet) set;
+                if (lineSet.isDashed()) mStyle.mLinePaint.setPathEffect(
+                        new DashPathEffect(lineSet.getDashedIntervals(), lineSet.getDashedPhase()));
+                else mStyle.mLinePaint.setPathEffect(null);
 
-			if (lineSet.isVisible()) {
+                if (!lineSet.isSmooth()) linePath = createLinePath(lineSet);
+                else linePath = createSmoothLinePath(lineSet);
 
-				mStyle.mLinePaint.setColor(lineSet.getColor());
-				mStyle.mLinePaint.setStrokeWidth(lineSet.getThickness());
-				applyShadow(mStyle.mLinePaint, lineSet.getAlpha(), lineSet.getShadowDx(), lineSet
-						  .getShadowDy(), lineSet.getShadowRadius(), lineSet.getShadowColor());
+                //Draw background
+                if (lineSet.hasFill() || lineSet.hasGradientFill())
+                    canvas.drawPath(createBackgroundPath(new Path(linePath), lineSet), mStyle.mFillPaint);
 
-				if (lineSet.isDashed()) mStyle.mLinePaint.setPathEffect(
-						  new DashPathEffect(lineSet.getDashedIntervals(), lineSet.getDashedPhase()));
-				else mStyle.mLinePaint.setPathEffect(null);
+                //Draw line
+                canvas.drawPath(linePath, mStyle.mLinePaint);
 
-				if (!lineSet.isSmooth()) linePath = createLinePath(lineSet);
-				else linePath = createSmoothLinePath(lineSet);
+                //Draw points
+                drawPoints(canvas, lineSet);
+            }
+        }
 
-				//Draw background
-				if (lineSet.hasFill() || lineSet.hasGradientFill())
-					canvas.drawPath(createBackgroundPath(new Path(linePath), lineSet), mStyle.mFillPaint);
+    }
 
-				//Draw line
-				canvas.drawPath(linePath, mStyle.mLinePaint);
+    @Override
+    void defineRegions(ArrayList<ArrayList<Region>>
+                               regions, ArrayList<ChartSet> data) {
+
+        float x;
+        float y;
+        int dataSize = data.size();
+        int setSize;
+        for (int i = 0; i < dataSize; i++) {
+
+            setSize = data.get(0).size();
+            for (int j = 0; j < setSize; j++) {
+
+                x = data.get(i).getEntry(j).getX();
+                y = data.get(i).getEntry(j).getY();
+                regions.get(i)
+                        .get(j)
+                        .set((int) (x - mClickableRadius), (int) (y - mClickableRadius),
+                                (int) (x + mClickableRadius), (int) (y + mClickableRadius));
+            }
+        }
+    }
+
+
+    /**
+     * Responsible for drawing points
+     */
+    private void drawPoints(Canvas canvas, LineSet set) {
+
+        int begin = set.getBegin();
+        int end = set.getEnd();
+        Point dot;
+        for (int i = begin; i < end; i++) {
+
+            dot = (Point) set.getEntry(i);
+
+            if (dot.isVisible()) {
+
+                // Style dot
+                mStyle.mDotsPaint.setColor(dot.getColor());
+                mStyle.mDotsPaint.setAlpha((int) (set.getAlpha() * style.FULL_ALPHA));
+                applyShadow(mStyle.mDotsPaint, set.getAlpha(), dot.getShadowDx(), dot
+                        .getShadowDy(), dot.getShadowRadius(), dot.getShadowColor());
+
+                // Draw dot
+                canvas.drawCircle(dot.getX(), dot.getY(), dot.getRadius(), mStyle.mDotsPaint);
+
+                //Draw dots stroke
+                if (dot.hasStroke()) {
+
+                    // Style stroke
+                    mStyle.mDotsStrokePaint.setStrokeWidth(dot.getStrokeThickness());
+                    mStyle.mDotsStrokePaint.setColor(dot.getStrokeColor());
+                    mStyle.mDotsStrokePaint.setAlpha((int) (set.getAlpha() * style.FULL_ALPHA));
+                    applyShadow(mStyle.mDotsStrokePaint, set.getAlpha(), dot.getShadowDx(), dot
+                            .getShadowDy(), dot.getShadowRadius(), dot.getShadowColor());
+
+                    canvas.drawCircle(dot.getX(), dot.getY(), dot.getRadius(), mStyle.mDotsStrokePaint);
+                }
+
+                // Draw drawable
+                if (dot.getDrawable() != null) {
+                    Bitmap dotsBitmap = Tools.drawableToBitmap(dot.getDrawable());
+                    canvas.drawBitmap(dotsBitmap, dot.getX() - dotsBitmap.getWidth() / 2,
+                            dot.getY() - dotsBitmap.getHeight() / 2, mStyle.mDotsPaint);
+                }
+            }
+        }
+
+    }
+
+
+    /**
+     * Responsible for drawing a (non smooth) line.
+     *
+     * @param set {@link LineSet} object
+     * @return {@link Path} object containing line
+     */
+    Path createLinePath(LineSet set) {
+
+        Path res = new Path();
+
+        int begin = set.getBegin();
+        int end = set.getEnd();
+        for (int i = begin; i < end; i++) {
+            if (i == begin) res.moveTo(set.getEntry(i).getX(), set.getEntry(i).getY());
+            else res.lineTo(set.getEntry(i).getX(), set.getEntry(i).getY());
+        }
+
+        return res;
+    }
+
+
+    /**
+     * Credits: http://www.jayway.com/author/andersericsson/
+     * Method responsible to draw a smooth line with the parsed screen points.
+     *
+     * @param set {@link LineSet} object.
+     * @return {@link Path} object containing smooth line
+     */
+    Path createSmoothLinePath(LineSet set) {
+
+        float thisPointX;
+        float thisPointY;
+        float nextPointX;
+        float nextPointY;
+        float startDiffX;
+        float startDiffY;
+        float endDiffX;
+        float endDiffY;
+        float firstControlX;
+        float firstControlY;
+        float secondControlX;
+        float secondControlY;
 
-				//Draw points
-				drawPoints(canvas, lineSet);
-			}
-		}
+        Path res = new Path();
+        res.moveTo(set.getEntry(set.getBegin()).getX(), set.getEntry(set.getBegin()).getY());
 
-	}
+        int begin = set.getBegin();
+        int end = set.getEnd();
+        for (int i = begin; i < end - 1; i++) {
 
+            thisPointX = set.getEntry(i).getX();
+            thisPointY = set.getEntry(i).getY();
 
-	/**
-	 * (Optional) To be overridden in order for each chart to define its own clickable regions.
-	 * This way, classes extending ChartView will only define their clickable regions.
-	 * <p>
-	 * Important: the returned vector must match the order of the data passed
-	 * by the user. This ensures that onTouchEvent will return the correct index.
-	 *
-	 * @param data {@link java.util.ArrayList} of {@link com.db.chart.model.ChartSet}
-	 * to use while defining each region of a {@link com.db.chart.view.BarChartView}
-	 *
-	 * @return {@link java.util.ArrayList} of {@link android.graphics.Region} with regions
-	 * where click will be detected
-	 */
-	@Override
-	void defineRegions(ArrayList<ArrayList<Region>>
-			  regions, ArrayList<ChartSet> data) {
-
-		float x;
-		float y;
-		int dataSize = data.size();
-		int setSize;
-		for (int i = 0; i < dataSize; i++) {
-
-			setSize = data.get(0).size();
-			for (int j = 0; j < setSize; j++) {
-
-				x = data.get(i).getEntry(j).getX();
-				y = data.get(i).getEntry(j).getY();
-				regions.get(i)
-						  .get(j)
-						  .set((int) (x - mClickableRadius), (int) (y - mClickableRadius),
-									 (int) (x + mClickableRadius), (int) (y + mClickableRadius));
-			}
-		}
-	}
-
-
-	/**
-	 * Responsible for drawing points
-	 */
-	private void drawPoints(Canvas canvas, LineSet set) {
-
-		int begin = set.getBegin();
-		int end = set.getEnd();
-		Point dot;
-		for (int i = begin; i < end; i++) {
-
-			dot = (Point) set.getEntry(i);
-
-			if (dot.isVisible()) {
-
-				// Style dot
-				mStyle.mDotsPaint.setColor(dot.getColor());
-				mStyle.mDotsPaint.setAlpha((int) (set.getAlpha() * 255));
-				applyShadow(mStyle.mDotsPaint, set.getAlpha(), dot.getShadowDx(), dot
-						  .getShadowDy(), dot.getShadowRadius(), dot.getShadowColor());
-
-				// Draw dot
-				canvas.drawCircle(dot.getX(), dot.getY(), dot.getRadius(), mStyle.mDotsPaint);
-
-				//Draw dots stroke
-				if (dot.hasStroke()) {
-
-					// Style stroke
-					mStyle.mDotsStrokePaint.setStrokeWidth(dot.getStrokeThickness());
-					mStyle.mDotsStrokePaint.setColor(dot.getStrokeColor());
-					mStyle.mDotsStrokePaint.setAlpha((int) (set.getAlpha() * 255));
-					applyShadow(mStyle.mDotsStrokePaint, set.getAlpha(), dot.getShadowDx(), dot
-							  .getShadowDy(), dot.getShadowRadius(), dot.getShadowColor());
-
-					canvas.drawCircle(dot.getX(), dot.getY(), dot.getRadius(), mStyle.mDotsStrokePaint);
-				}
-
-				// Draw drawable
-				if (dot.getDrawable() != null) {
-					Bitmap dotsBitmap = Tools.drawableToBitmap(dot.getDrawable());
-					canvas.drawBitmap(dotsBitmap, dot.getX() - dotsBitmap.getWidth() / 2,
-							  dot.getY() - dotsBitmap.getHeight() / 2, mStyle.mDotsPaint);
-				}
-			}
-		}
-
-	}
-
-
-	/**
-	 * Responsible for drawing a (non smooth) line
-	 *
-	 * @param set {@link LineSet} object.
-	 */
-	Path createLinePath(LineSet set) {
-
-		Path res = new Path();
-
-		int begin = set.getBegin();
-		int end = set.getEnd();
-		for (int i = begin; i < end; i++) {
-			if (i == begin) res.moveTo(set.getEntry(i).getX(), set.getEntry(i).getY());
-			else res.lineTo(set.getEntry(i).getX(), set.getEntry(i).getY());
-		}
-
-		return res;
-	}
-
-
-	/**
-	 * Credits: http://www.jayway.com/author/andersericsson/
-	 * Method responsible to draw a smooth line with the parsed screen points.
-	 *
-	 * @param set {@link LineSet} object.
-	 */
-	Path createSmoothLinePath(LineSet set) {
-
-		float thisPointX;
-		float thisPointY;
-		float nextPointX;
-		float nextPointY;
-		float startDiffX;
-		float startDiffY;
-		float endDiffX;
-		float endDiffY;
-		float firstControlX;
-		float firstControlY;
-		float secondControlX;
-		float secondControlY;
+            nextPointX = set.getEntry(i + 1).getX();
+            nextPointY = set.getEntry(i + 1).getY();
 
-		Path res = new Path();
-		res.moveTo(set.getEntry(set.getBegin()).getX(), set.getEntry(set.getBegin()).getY());
+            startDiffX = (nextPointX - set.getEntry(si(set.size(), i - 1)).getX());
+            startDiffY = (nextPointY - set.getEntry(si(set.size(), i - 1)).getY());
 
-		int begin = set.getBegin();
-		int end = set.getEnd();
-		for (int i = begin; i < end - 1; i++) {
+            endDiffX = (set.getEntry(si(set.size(), i + 2)).getX() - thisPointX);
+            endDiffY = (set.getEntry(si(set.size(), i + 2)).getY() - thisPointY);
 
-			thisPointX = set.getEntry(i).getX();
-			thisPointY = set.getEntry(i).getY();
+            firstControlX = thisPointX + (SMOOTH_FACTOR * startDiffX);
+            firstControlY = thisPointY + (SMOOTH_FACTOR * startDiffY);
 
-			nextPointX = set.getEntry(i + 1).getX();
-			nextPointY = set.getEntry(i + 1).getY();
+            secondControlX = nextPointX - (SMOOTH_FACTOR * endDiffX);
+            secondControlY = nextPointY - (SMOOTH_FACTOR * endDiffY);
 
-			startDiffX = (nextPointX - set.getEntry(si(set.size(), i - 1)).getX());
-			startDiffY = (nextPointY - set.getEntry(si(set.size(), i - 1)).getY());
+            res.cubicTo(firstControlX, firstControlY, secondControlX, secondControlY, nextPointX,
+                    nextPointY);
+        }
 
-			endDiffX = (set.getEntry(si(set.size(), i + 2)).getX() - thisPointX);
-			endDiffY = (set.getEntry(si(set.size(), i + 2)).getY() - thisPointY);
+        return res;
 
-			firstControlX = thisPointX + (0.15f * startDiffX);
-			firstControlY = thisPointY + (0.15f * startDiffY);
+    }
 
-			secondControlX = nextPointX - (0.15f * endDiffX);
-			secondControlY = nextPointY - (0.15f * endDiffY);
 
-			res.cubicTo(firstControlX, firstControlY, secondControlX, secondControlY, nextPointX,
-					  nextPointY);
-		}
+    /**
+     * Responsible for drawing line background
+     *
+     * @param path {@link Path} object containing line path
+     * @param set  {@link LineSet} object.
+     * @return {@link Path} object containing background
+     */
+    private Path createBackgroundPath(Path path, LineSet set) {
 
-		return res;
+        mStyle.mFillPaint.setAlpha((int) (set.getAlpha() * style.FULL_ALPHA));
 
-	}
+        if (set.hasFill()) mStyle.mFillPaint.setColor(set.getFillColor());
+        if (set.hasGradientFill()) mStyle.mFillPaint.setShader(
+                new LinearGradient(super.getInnerChartLeft(), super.getInnerChartTop(),
+                        super.getInnerChartLeft(), super.getInnerChartBottom(),
+                        set.getGradientColors(), set.getGradientPositions(), Shader.TileMode.MIRROR));
 
+        path.lineTo(set.getEntry(set.getEnd() - 1).getX(), super.getInnerChartBottom());
+        path.lineTo(set.getEntry(set.getBegin()).getX(), super.getInnerChartBottom());
+        path.close();
 
-	/**
-	 * Responsible for drawing line background
-	 *
-	 * @param path {@link Path} object containing line path
-	 * @param set {@link LineSet} object.
-	 */
-	private Path createBackgroundPath(Path path, LineSet set) {
+        return path;
+    }
 
-		mStyle.mFillPaint.setAlpha((int) (set.getAlpha() * 255));
 
-		if (set.hasFill()) mStyle.mFillPaint.setColor(set.getFillColor());
-		if (set.hasGradientFill()) mStyle.mFillPaint.setShader(
-				  new LinearGradient(super.getInnerChartLeft(), super.getInnerChartTop(),
-							 super.getInnerChartLeft(), super.getInnerChartBottom(),
-							 set.getGradientColors(), set.getGradientPositions(), Shader.TileMode.MIRROR));
+    /**
+     * @param radius Point's radius where touch event will be detected
+     * @return {@link com.db.chart.view.LineChartView} self-reference.
+     */
+    public LineChartView setClickablePointRadius(@FloatRange(from = 0.f) float radius) {
 
-		path.lineTo(set.getEntry(set.getEnd() - 1).getX(), super.getInnerChartBottom());
-		path.lineTo(set.getEntry(set.getBegin()).getX(), super.getInnerChartBottom());
-		path.close();
+        mClickableRadius = radius;
+        return this;
+    }
 
-		return path;
-	}
 
+    /**
+     * Class responsible to style the LineChart!
+     * Can be instantiated with or without attributes.
+     */
+    class Style {
 
-	/**
-	 * @param radius Point's radius where touch event will be detected
-	 *
-	 * @return {@link com.db.chart.view.LineChartView} self-reference.
-	 */
-	public LineChartView setClickablePointRadius(@FloatRange(from = 0.f) float radius) {
+        static final int FULL_ALPHA = 255;
 
-		mClickableRadius = radius;
-		return this;
-	}
+        /**
+         * Paint variables
+         */
+        private Paint mDotsPaint;
 
+        private Paint mDotsStrokePaint;
 
-	/**
-	 * Class responsible to style the LineChart!
-	 * Can be instantiated with or without attributes.
-	 */
-	class Style {
+        private Paint mLinePaint;
 
+        private Paint mFillPaint;
 
-		/** Paint variables */
-		private Paint mDotsPaint;
 
-		private Paint mDotsStrokePaint;
+        Style() {
+        }
 
-		private Paint mLinePaint;
 
-		private Paint mFillPaint;
+        Style(TypedArray attrs) {
+        }
 
+        private void init() {
 
-		Style() {}
+            mDotsPaint = new Paint();
+            mDotsPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+            mDotsPaint.setAntiAlias(true);
 
+            mDotsStrokePaint = new Paint();
+            mDotsStrokePaint.setStyle(Paint.Style.STROKE);
+            mDotsStrokePaint.setAntiAlias(true);
 
-		Style(TypedArray attrs) {}
+            mLinePaint = new Paint();
+            mLinePaint.setStyle(Paint.Style.STROKE);
+            mLinePaint.setAntiAlias(true);
 
+            mFillPaint = new Paint();
+            mFillPaint.setStyle(Paint.Style.FILL);
+        }
 
-		private void init() {
+        private void clean() {
 
-			mDotsPaint = new Paint();
-			mDotsPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-			mDotsPaint.setAntiAlias(true);
+            mLinePaint = null;
+            mFillPaint = null;
+            mDotsPaint = null;
+        }
 
-
-			mDotsStrokePaint = new Paint();
-			mDotsStrokePaint.setStyle(Paint.Style.STROKE);
-			mDotsStrokePaint.setAntiAlias(true);
-
-			mLinePaint = new Paint();
-			mLinePaint.setStyle(Paint.Style.STROKE);
-			mLinePaint.setAntiAlias(true);
-
-			mFillPaint = new Paint();
-			mFillPaint.setStyle(Paint.Style.FILL);
-		}
-
-
-		private void clean() {
-
-			mLinePaint = null;
-			mFillPaint = null;
-			mDotsPaint = null;
-		}
-
-	}
+    }
 
 }

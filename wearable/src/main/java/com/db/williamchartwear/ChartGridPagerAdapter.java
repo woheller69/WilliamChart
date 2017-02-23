@@ -24,38 +24,38 @@ import android.support.wearable.view.FragmentGridPagerAdapter;
 
 public class ChartGridPagerAdapter extends FragmentGridPagerAdapter {
 
-	public ChartGridPagerAdapter(Context ctx, FragmentManager fm) {
+    public ChartGridPagerAdapter(Context ctx, FragmentManager fm) {
 
-		super(fm);
-	}
-
-
-	@Override
-	public Fragment getFragment(int row, int col) {
-
-		switch (row) {
-			case 0:
-				return new LineFragment();
-			case 1:
-				return new BarFragment();
-			case 2:
-				return new StackedFragment();
-			default:
-				return new LineFragment();
-		}
-	}
+        super(fm);
+    }
 
 
-	@Override
-	public int getRowCount() {
+    @Override
+    public Fragment getFragment(int row, int col) {
 
-		return 3;
-	}
+        switch (row) {
+            case 0:
+                return new LineFragment();
+            case 1:
+                return new BarFragment();
+            case 2:
+                return new StackedFragment();
+            default:
+                return new LineFragment();
+        }
+    }
 
 
-	@Override
-	public int getColumnCount(int i) {
+    @Override
+    public int getRowCount() {
 
-		return 1;
-	}
+        return 3;
+    }
+
+
+    @Override
+    public int getColumnCount(int i) {
+
+        return 1;
+    }
 }

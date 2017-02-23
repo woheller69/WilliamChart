@@ -22,7 +22,7 @@
             android:layout_height="match_parent"
             android:layout_below="@id/chart_toolbar"
             williamchart:chart_axis="false"
-            williamchart:chart_labels="none"
-            williamchart:chart_barSpacing="1.5dp"/>
+            williamchart:chart_barSpacing="1.5dp"
+            williamchart:chart_labels="none" />
     </RelativeLayout>
 </android.support.v7.widget.CardView>

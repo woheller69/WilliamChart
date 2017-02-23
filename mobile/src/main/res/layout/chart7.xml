@@ -24,12 +24,12 @@
             android:layout_marginBottom="12dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
-            williamchart:chart_fontSize="12dp"
-            williamchart:chart_typeface="OpenSans-Regular.ttf"
             williamchart:chart_axis="false"
-            williamchart:chart_labelColor="#FF8E8A84"
             williamchart:chart_axisBorderSpacing="0dp"
-            williamchart:chart_barSpacing="4dp"/>
+            williamchart:chart_barSpacing="4dp"
+            williamchart:chart_fontSize="12dp"
+            williamchart:chart_labelColor="#FF8E8A84"
+            williamchart:chart_typeface="OpenSans-Regular.ttf" />
 
         <TextView
             android:id="@+id/value"

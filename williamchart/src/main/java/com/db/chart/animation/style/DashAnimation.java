@@ -20,14 +20,16 @@ import com.db.chart.model.ChartSet;
 import com.db.chart.model.LineSet;
 
 
+/**
+ * Used to display a dash animation of a line.
+ */
 public class DashAnimation extends BaseStyleAnimation {
 
+    @Override
+    public void nextUpdate(ChartSet set) {
 
-	@Override
-	public void nextUpdate(ChartSet set) {
-
-		LineSet line = (LineSet) set;
-		line.setDashedPhase(line.getDashedPhase() - 4);
-	}
+        LineSet line = (LineSet) set;
+        line.setDashedPhase(line.getDashedPhase() - 4);
+    }
 
 }

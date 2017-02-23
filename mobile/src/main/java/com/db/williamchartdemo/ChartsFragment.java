@@ -31,59 +31,69 @@ import android.widget.TextView;
 
 public class ChartsFragment extends Fragment {
 
-	private final static int FULL_SPAN = 3;
-	private final static int MULTI_SPAN = 2;
-	private final static int SINGLE_SPAN = 1;
+    private final static int FULL_SPAN = 3;
+    private final static int MULTI_SPAN = 2;
+    private final static int SINGLE_SPAN = 1;
 
-	private ChartAdapter mAdapter;
+    private ChartAdapter mAdapter;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
 
-		super.onCreate(savedInstanceState);
-		setHasOptionsMenu(true);
-	}
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			  Bundle savedInstanceState) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
-		View layout = inflater.inflate(R.layout.charts, container, false);
+        View layout = inflater.inflate(R.layout.charts, container, false);
 
-		((AppCompatActivity) getActivity()).setSupportActionBar(
-				  (Toolbar) layout.findViewById(R.id.toolbar));
-		((TextView) layout.findViewById(R.id.title)).setTypeface(
-				  Typeface.createFromAsset(getContext().getAssets(), "Ponsi-Regular.otf"));
+        ((AppCompatActivity) getActivity()).setSupportActionBar(
+                (Toolbar) layout.findViewById(R.id.toolbar));
+        ((TextView) layout.findViewById(R.id.title)).setTypeface(
+                Typeface.createFromAsset(getContext().getAssets(), "Ponsi-Regular.otf"));
 
-		RecyclerView mRecyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view);
+        RecyclerView mRecyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view);
 
-		GridLayoutManager mLayoutManager = new GridLayoutManager(getContext(), FULL_SPAN);
-		mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-			@Override
-			public int getSpanSize(int position) {
+        GridLayoutManager mLayoutManager = new GridLayoutManager(getContext(), FULL_SPAN);
+        mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
 
-				switch(mAdapter.getItemViewType(position)){
-					case 0: return FULL_SPAN;
-					case 1: return MULTI_SPAN;
-					case 2: return SINGLE_SPAN;
-					case 3: return FULL_SPAN;
-					case 4: return FULL_SPAN;
-					case 5: return SINGLE_SPAN;
-					case 6: return MULTI_SPAN;
-					case 7: return FULL_SPAN;
-					case 8: return FULL_SPAN;
-					default: return SINGLE_SPAN;
-				}
-			}
-		});
+                switch (mAdapter.getItemViewType(position)) {
+                    case 0:
+                        return FULL_SPAN;
+                    case 1:
+                        return MULTI_SPAN;
+                    case 2:
+                        return SINGLE_SPAN;
+                    case 3:
+                        return FULL_SPAN;
+                    case 4:
+                        return FULL_SPAN;
+                    case 5:
+                        return SINGLE_SPAN;
+                    case 6:
+                        return MULTI_SPAN;
+                    case 7:
+                        return FULL_SPAN;
+                    case 8:
+                        return FULL_SPAN;
+                    default:
+                        return SINGLE_SPAN;
+                }
+            }
+        });
 
-		mAdapter = new ChartAdapter(getContext());
+        mAdapter = new ChartAdapter(getContext());
 
-		mRecyclerView.setLayoutManager(mLayoutManager);
-		mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
 
-		return layout;
-	}
+        return layout;
+    }
 
 }

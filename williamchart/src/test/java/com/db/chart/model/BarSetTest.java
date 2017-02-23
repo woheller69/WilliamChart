@@ -14,62 +14,62 @@ import static org.junit.Assert.assertEquals;
 @SmallTest
 public class BarSetTest {
 
-	BarSet set;
+    BarSet set;
 
-	Bar bar;
-
-
-	@Before
-	public void setUp() {
-
-		set = new BarSet();
-		for (int i = 0; i < 3; i++) {
-			bar = new Bar("test" + Integer.toString(i), (float) i);
-			set.addBar(bar);
-		}
-	}
+    Bar bar;
 
 
-	/**
-	 * No null point argument.
-	 */
-	@Test(expected = NullPointerException.class)
-	public void pointNullException() {
+    @Before
+    public void setUp() {
 
-		set.addBar(null);
-	}
-
-
-	/**
-	 * Test values update.
-	 */
-	@Test
-	public void updateValues() {
-
-		set.updateValues(new float[] {4f, 5f, 6f});
-		assertEquals(4f, set.getValue(0), 0f);
-		assertEquals(5f, set.getValue(1), 0f);
-		assertEquals(6f, set.getValue(2), 0f);
-	}
+        set = new BarSet();
+        for (int i = 0; i < 3; i++) {
+            bar = new Bar("test" + Integer.toString(i), (float) i);
+            set.addBar(bar);
+        }
+    }
 
 
-	/**
-	 * No different size when updating values.
-	 */
-	@Test(expected = IllegalArgumentException.class)
-	public void updateValuesSizeException() {
+    /**
+     * No null point argument.
+     */
+    @Test(expected = NullPointerException.class)
+    public void pointNullException() {
 
-		set.updateValues(new float[] {1f, 2f});
-	}
+        set.addBar(null);
+    }
 
 
-	/**
-	 * Gradient colors can't be null.
-	 */
-	@Test(expected = IllegalArgumentException.class)
-	public void barGradientNullException() {
+    /**
+     * Test values update.
+     */
+    @Test
+    public void updateValues() {
 
-		bar.setGradientColor(null, new float[] {1.f, 2.f});
-	}
+        set.updateValues(new float[]{4f, 5f, 6f});
+        assertEquals(4f, set.getValue(0), 0f);
+        assertEquals(5f, set.getValue(1), 0f);
+        assertEquals(6f, set.getValue(2), 0f);
+    }
+
+
+    /**
+     * No different size when updating values.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void updateValuesSizeException() {
+
+        set.updateValues(new float[]{1f, 2f});
+    }
+
+
+    /**
+     * Gradient colors can't be null.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void barGradientNullException() {
+
+        bar.setGradientColor(null, new float[]{1.f, 2.f});
+    }
 
 }

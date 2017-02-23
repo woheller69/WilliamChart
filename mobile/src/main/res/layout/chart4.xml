@@ -25,10 +25,10 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             williamchart:chart_axis="false"
-            williamchart:chart_labels="none"
             williamchart:chart_axisBorderSpacing="5dp"
             williamchart:chart_barSpacing="5dp"
-            williamchart:chart_cornerRadius="5dp"/>
+            williamchart:chart_cornerRadius="5dp"
+            williamchart:chart_labels="none" />
 
         <TextView
             android:id="@+id/electric_text"

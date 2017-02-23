@@ -25,53 +25,63 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 
 
-public class Tools {
+/**
+ * Utilities class
+ */
+public final class Tools {
+
+    private Tools() {
+    }
 
 
-	/**
-	 * Converts dp size into pixels.
-	 *
-	 * @param dp dp size to get converted
-	 *
-	 * @return Pixel size
-	 */
-	public static float fromDpToPx(float dp) {
+    /**
+     * Converts dp size into pixels.
+     *
+     * @param dp dp size to get converted
+     * @return Pixel size
+     */
+    public static float fromDpToPx(float dp) {
 
-		try {
-			return dp * Resources.getSystem().getDisplayMetrics().density;
-		} catch (Exception e) {
-			return dp;
-		}
-	}
-
-
-	/**
-	 * Converts a {@link android.graphics.drawable.Drawable} into {@link android.graphics.Bitmap}.
-	 *
-	 * @param drawable {@link android.graphics.drawable.Drawable} to be converted
-	 *
-	 * @return {@link android.graphics.Bitmap} object
-	 */
-	public static Bitmap drawableToBitmap(@NonNull Drawable drawable) {
-
-		if (drawable instanceof BitmapDrawable) return ((BitmapDrawable) drawable).getBitmap();
-
-		Bitmap bitmap =
-				  Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(),
-							 Config.ARGB_8888);
-		Canvas canvas = new Canvas(bitmap);
-		drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-		drawable.draw(canvas);
-
-		return bitmap;
-	}
+        try {
+            return dp * Resources.getSystem().getDisplayMetrics().density;
+        } catch (Exception e) {
+            return dp;
+        }
+    }
 
 
-	public static <T> T checkNotNull(T reference) {
-		if(reference == null)
-			throw new NullPointerException();
-		else
-			return reference;
-	}
+    /**
+     * Converts a {@link android.graphics.drawable.Drawable} into {@link android.graphics.Bitmap}.
+     *
+     * @param drawable {@link android.graphics.drawable.Drawable} to be converted
+     * @return {@link android.graphics.Bitmap} object
+     */
+    public static Bitmap drawableToBitmap(@NonNull Drawable drawable) {
+
+        if (drawable instanceof BitmapDrawable) return ((BitmapDrawable) drawable).getBitmap();
+
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
+                drawable.getIntrinsicHeight(), Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
+    }
+
+
+    /**
+     * Check if null reference.
+     *
+     * @param reference Reference to be checked.
+     * @param <T>       Not applicable
+     * @return If not null reference will be given back
+     */
+    public static <T> T checkNotNull(T reference) {
+        if (reference == null)
+            throw new NullPointerException();
+        else
+            return reference;
+    }
 
 }

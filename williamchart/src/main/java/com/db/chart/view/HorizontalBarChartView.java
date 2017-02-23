@@ -37,153 +37,124 @@ import java.util.ArrayList;
 public class HorizontalBarChartView extends BaseBarChartView {
 
 
-	public HorizontalBarChartView(Context context, AttributeSet attrs) {
+    public HorizontalBarChartView(Context context, AttributeSet attrs) {
 
-		super(context, attrs);
+        super(context, attrs);
 
-		setOrientation(Orientation.HORIZONTAL);
-		setMandatoryBorderSpacing();
-	}
-
-
-	public HorizontalBarChartView(Context context) {
-
-		super(context);
-
-		setOrientation(Orientation.HORIZONTAL);
-		setMandatoryBorderSpacing();
-	}
+        setOrientation(Orientation.HORIZONTAL);
+        setMandatoryBorderSpacing();
+    }
 
 
-	/**
-	 * Method responsible to draw bars with the parsed screen points.
-	 *
-	 * @param canvas The canvas to draw on
-	 * @param data {@link java.util.ArrayList} of {@link com.db.chart.model.ChartSet}
-	 * to use while drawing the Chart
-	 */
-	@Override
-	public void onDrawChart(Canvas canvas, ArrayList<ChartSet> data) {
+    public HorizontalBarChartView(Context context) {
 
-		final int nSets = data.size();
-		final int nEntries = data.get(0).size();
+        super(context);
 
-		float offset;
-		BarSet barSet;
-		Bar bar;
+        setOrientation(Orientation.HORIZONTAL);
+        setMandatoryBorderSpacing();
+    }
 
-		for (int i = 0; i < nEntries; i++) {
+    @Override
+    public void onDrawChart(Canvas canvas, ArrayList<ChartSet> data) {
 
-			// Set first offset to draw a group of bars
-			offset = data.get(0).getEntry(i).getY() - drawingOffset;
+        final int nSets = data.size();
+        final int nEntries = data.get(0).size();
 
-			for (int j = 0; j < nSets; j++) {
+        float offset;
+        BarSet barSet;
+        Bar bar;
 
-				barSet = (BarSet) data.get(j);
-				bar = (Bar) barSet.getEntry(i);
+        for (int i = 0; i < nEntries; i++) {
 
-				// If entry value is 0 it won't be drawn
-				if (!barSet.isVisible()) continue;
+            // Set first offset to draw a group of bars
+            offset = data.get(0).getEntry(i).getY() - drawingOffset;
 
-				// Style it!
-				if (!bar.hasGradientColor()) style.barPaint.setColor(bar.getColor());
-				else style.barPaint.setShader(
-						  new LinearGradient(this.getZeroPosition(), bar.getY(), bar.getX(), bar.getY(),
-									 bar.getGradientColors(), bar.getGradientPositions(),
-									 Shader.TileMode.MIRROR));
-				applyShadow(style.barPaint, barSet.getAlpha(), bar.getShadowDx(), bar
-						  .getShadowDy(), bar.getShadowRadius(), bar.getShadowColor());
+            for (int j = 0; j < nSets; j++) {
 
-				// Draw background
-				if (style.hasBarBackground) drawBarBackground(canvas, this.getInnerChartLeft(), offset,
-						  this.getInnerChartRight(), (offset + barWidth));
+                barSet = (BarSet) data.get(j);
+                bar = (Bar) barSet.getEntry(i);
 
+                // If entry value is 0 it won't be drawn
+                if (!barSet.isVisible()) continue;
 
-				// Draw bar
-				if (bar.getValue() >= 0) // Positive
-					drawBar(canvas, this.getZeroPosition(), offset, bar.getX(), offset + barWidth);
-				else // Negative
-					drawBar(canvas, bar.getX(), offset, this.getZeroPosition(), offset + barWidth);
+                // Style it!
+                if (!bar.hasGradientColor()) style.barPaint.setColor(bar.getColor());
+                else style.barPaint.setShader(
+                        new LinearGradient(this.getZeroPosition(), bar.getY(), bar.getX(), bar.getY(),
+                                bar.getGradientColors(), bar.getGradientPositions(),
+                                Shader.TileMode.MIRROR));
+                applyShadow(style.barPaint, barSet.getAlpha(), bar.getShadowDx(), bar
+                        .getShadowDy(), bar.getShadowRadius(), bar.getShadowColor());
 
-				offset += barWidth;
+                // Draw background
+                if (style.hasBarBackground)
+                    drawBarBackground(canvas, this.getInnerChartLeft(), offset,
+                            this.getInnerChartRight(), (offset + barWidth));
 
-				// If last bar of group no set spacing is necessary
-				if (j != nSets - 1) offset += style.setSpacing;
-			}
-		}
-	}
+                // Draw bar
+                if (bar.getValue() >= 0) // Positive
+                    drawBar(canvas, this.getZeroPosition(), offset, bar.getX(), offset + barWidth);
+                else // Negative
+                    drawBar(canvas, bar.getX(), offset, this.getZeroPosition(), offset + barWidth);
 
+                offset += barWidth;
 
-	/**
-	 * (Optional) To be overridden in case the view needs to execute some code before
-	 * starting the drawing.
-	 *
-	 * @param data Array of {@link ChartSet} to do the necessary preparation just before onDraw
-	 */
-	@Override
-	protected void onPreDrawChart(ArrayList<ChartSet> data) {
+                // If last bar of group no set spacing is necessary
+                if (j != nSets - 1) offset += style.setSpacing;
+            }
+        }
+    }
 
-		// In case of only on entry
-		if (data.get(0).size() == 1) {
-			style.barSpacing = 0;
-			calculateBarsWidth(data.size(), 0, this.getInnerChartBottom() -
-					  this.getInnerChartTop() -
-					  this.getBorderSpacing() * 2);
-			// In case of more than one entry
-		} else calculateBarsWidth(data.size(), data.get(0).getEntry(1).getY(),
-				  data.get(0).getEntry(0).getY());
+    @Override
+    protected void onPreDrawChart(ArrayList<ChartSet> data) {
 
-		calculatePositionOffset(data.size());
-	}
+        // In case of only on entry
+        if (data.get(0).size() == 1) {
+            style.barSpacing = 0;
+            calculateBarsWidth(data.size(), 0, this.getInnerChartBottom()
+                    - this.getInnerChartTop()
+                    - this.getBorderSpacing() * 2);
+            // In case of more than one entry
+        } else calculateBarsWidth(data.size(), data.get(0).getEntry(1).getY(),
+                data.get(0).getEntry(0).getY());
 
+        calculatePositionOffset(data.size());
+    }
 
-	/**
-	 * (Optional) To be overridden in order for each chart to define its own clickable regions.
-	 * This way, classes extending ChartView will only define their clickable regions.
-	 * <p>
-	 * Important: the returned vector must match the order of the data passed
-	 * by the user. This ensures that onTouchEvent will return the correct index.
-	 *
-	 * @param data {@link java.util.ArrayList} of {@link com.db.chart.model.ChartSet} to use
-	 * while defining each region of a {@link com.db.chart.view.HorizontalBarChartView}
-	 *
-	 * @return {@link java.util.ArrayList} of {@link android.graphics.Region} with regions
-	 * where click will be detected
-	 */
-	@Override
-	void defineRegions(ArrayList<ArrayList<Region>> regions, ArrayList<ChartSet> data) {
+    @Override
+    void defineRegions(ArrayList<ArrayList<Region>> regions, ArrayList<ChartSet> data) {
 
-		int nSets = data.size();
-		int nEntries = data.get(0).size();
+        int nSets = data.size();
+        int nEntries = data.get(0).size();
 
-		float offset;
-		BarSet barSet;
-		Bar bar;
+        float offset;
+        BarSet barSet;
+        Bar bar;
 
-		for (int i = 0; i < nEntries; i++) {
+        for (int i = 0; i < nEntries; i++) {
 
-			// Set first offset to draw a group of bars
-			offset = data.get(0).getEntry(i).getY() - drawingOffset;
+            // Set first offset to draw a group of bars
+            offset = data.get(0).getEntry(i).getY() - drawingOffset;
 
-			for (int j = 0; j < nSets; j++) {
+            for (int j = 0; j < nSets; j++) {
 
-				barSet = (BarSet) data.get(j);
-				bar = (Bar) barSet.getEntry(i);
+                barSet = (BarSet) data.get(j);
+                bar = (Bar) barSet.getEntry(i);
 
-				if (bar.getValue() > 0 && (int) bar.getX() != (int) this.getZeroPosition())
-					regions.get(j).get(i).set((int) this.getZeroPosition(), (int) offset,
-							(int) bar.getX(), (int) (offset + barWidth));
-				else if (bar.getValue() < 0 && (int) bar.getX() != (int) this.getZeroPosition())
-					regions.get(j).get(i).set((int) bar.getX(), (int) offset,
-							(int) this.getZeroPosition(), (int) (offset + barWidth));
-				else // If bar.getValue() == 0, force region to 1 pixel
-					regions.get(j).get(i).set((int) this.getZeroPosition() - 1, (int) offset,
-							(int) this.getZeroPosition(), (int) (offset + barWidth));
+                if (bar.getValue() > 0 && (int) bar.getX() != (int) this.getZeroPosition())
+                    regions.get(j).get(i).set((int) this.getZeroPosition(), (int) offset,
+                            (int) bar.getX(), (int) (offset + barWidth));
+                else if (bar.getValue() < 0 && (int) bar.getX() != (int) this.getZeroPosition())
+                    regions.get(j).get(i).set((int) bar.getX(), (int) offset,
+                            (int) this.getZeroPosition(), (int) (offset + barWidth));
+                else // If bar.getValue() == 0, force region to 1 pixel
+                    regions.get(j).get(i).set((int) this.getZeroPosition() - 1, (int) offset,
+                            (int) this.getZeroPosition(), (int) (offset + barWidth));
 
-				// If last bar of group no set spacing is necessary
-				if (j != nSets - 1) offset += style.setSpacing;
-			}
-		}
-	}
+                // If last bar of group no set spacing is necessary
+                if (j != nSets - 1) offset += style.setSpacing;
+            }
+        }
+    }
 
 }

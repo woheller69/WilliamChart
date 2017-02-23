@@ -26,103 +26,103 @@ import android.widget.RelativeLayout;
 public class CardController {
 
 
-	private final ImageButton mPlayBtn;
+    private final ImageButton mPlayBtn;
 
-	private final ImageButton mUpdateBtn;
+    private final ImageButton mUpdateBtn;
 
-	private final Runnable unlockAction = new Runnable() {
-		@Override
-		public void run() {
+    private final Runnable unlockAction = new Runnable() {
+        @Override
+        public void run() {
 
-			new Handler().postDelayed(new Runnable() {
-				public void run() {
+            new Handler().postDelayed(new Runnable() {
+                public void run() {
 
-					unlock();
-				}
-			}, 500);
-		}
-	};
+                    unlock();
+                }
+            }, 500);
+        }
+    };
 
-	protected boolean firstStage;
+    protected boolean firstStage;
 
-	private final Runnable showAction = new Runnable() {
-		@Override
-		public void run() {
+    private final Runnable showAction = new Runnable() {
+        @Override
+        public void run() {
 
-			new Handler().postDelayed(new Runnable() {
-				public void run() {
+            new Handler().postDelayed(new Runnable() {
+                public void run() {
 
-					show(unlockAction);
-				}
-			}, 500);
-		}
-	};
-
-
-	protected CardController(CardView card) {
-
-		super();
-
-		RelativeLayout toolbar = (RelativeLayout) card.findViewById(R.id.chart_toolbar);
-		mPlayBtn = (ImageButton) toolbar.findViewById(R.id.play);
-		mUpdateBtn = (ImageButton) toolbar.findViewById(R.id.update);
-
-		mPlayBtn.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-
-				dismiss(showAction);
-			}
-		});
-
-		mUpdateBtn.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-
-				update();
-			}
-		});
-	}
+                    show(unlockAction);
+                }
+            }, 500);
+        }
+    };
 
 
-	public void init() {
+    protected CardController(CardView card) {
 
-		show(unlockAction);
-	}
+        super();
 
+        RelativeLayout toolbar = (RelativeLayout) card.findViewById(R.id.chart_toolbar);
+        mPlayBtn = (ImageButton) toolbar.findViewById(R.id.play);
+        mUpdateBtn = (ImageButton) toolbar.findViewById(R.id.update);
 
-	protected void show(Runnable action) {
+        mPlayBtn.setOnClickListener(new View.OnClickListener() {
 
-		lock();
-		firstStage = false;
-	}
+            @Override
+            public void onClick(View v) {
 
+                dismiss(showAction);
+            }
+        });
 
-	protected void update() {
+        mUpdateBtn.setOnClickListener(new View.OnClickListener() {
 
-		lock();
-		firstStage = !firstStage;
-	}
+            @Override
+            public void onClick(View v) {
 
-
-	protected void dismiss(Runnable action) {
-
-		lock();
-	}
-
-
-	private void lock() {
-
-		mPlayBtn.setEnabled(false);
-		mUpdateBtn.setEnabled(false);
-	}
+                update();
+            }
+        });
+    }
 
 
-	private void unlock() {
+    public void init() {
 
-		mPlayBtn.setEnabled(true);
-		mUpdateBtn.setEnabled(true);
-	}
+        show(unlockAction);
+    }
+
+
+    protected void show(Runnable action) {
+
+        lock();
+        firstStage = false;
+    }
+
+
+    protected void update() {
+
+        lock();
+        firstStage = !firstStage;
+    }
+
+
+    protected void dismiss(Runnable action) {
+
+        lock();
+    }
+
+
+    private void lock() {
+
+        mPlayBtn.setEnabled(false);
+        mUpdateBtn.setEnabled(false);
+    }
+
+
+    private void unlock() {
+
+        mPlayBtn.setEnabled(true);
+        mUpdateBtn.setEnabled(true);
+    }
 }

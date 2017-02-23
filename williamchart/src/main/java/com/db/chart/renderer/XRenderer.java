@@ -27,187 +27,163 @@ import android.graphics.Paint.Align;
 public class XRenderer extends AxisRenderer {
 
 
-	public XRenderer() {
+    public XRenderer() {
 
-		super();
-	}
-
-
-	/*
-	 * IMPORTANT: Method's order is crucial. Change it (or not) carefully.
-	 */
-	@Override
-	public void dispose() {
-
-		super.dispose();
-
-		defineMandatoryBorderSpacing(mInnerChartLeft, mInnerChartRight);
-		defineLabelsPosition(mInnerChartLeft, mInnerChartRight);
-	}
+        super();
+    }
 
 
-	@Override
-	public void measure(int left, int top, int right, int bottom) {
+    /*
+     * IMPORTANT: Method's order is crucial. Change it (or not) carefully.
+     */
+    @Override
+    public void dispose() {
 
-		mInnerChartLeft = measureInnerChartLeft(left);
-		mInnerChartTop = measureInnerChartTop(top);
-		mInnerChartRight = measureInnerChartRight(right);
-		mInnerChartBottom = measureInnerChartBottom(bottom);
-	}
+        super.dispose();
 
+        defineMandatoryBorderSpacing(mInnerChartLeft, mInnerChartRight);
+        defineLabelsPosition(mInnerChartLeft, mInnerChartRight);
+    }
 
-	/**
-	 * Get the vertical position of axis based on the chart inner bottom.
-	 */
-	@Override
-	protected float defineAxisPosition() {
+    @Override
+    public void measure(int left, int top, int right, int bottom) {
 
-		float result = mInnerChartBottom;
-		if (style.hasXAxis()) result += style.getAxisThickness() / 2;
-		return result;
-	}
+        mInnerChartLeft = measureInnerChartLeft(left);
+        mInnerChartTop = measureInnerChartTop(top);
+        mInnerChartRight = measureInnerChartRight(right);
+        mInnerChartBottom = measureInnerChartBottom(bottom);
+    }
 
+    @Override
+    protected float defineAxisPosition() {
 
-	/**
-	 * Get the vertical position of labels based on the axis position.
-	 */
-	@Override
-	protected float defineStaticLabelsPosition(float axisCoordinate, int distanceToAxis) {
+        float result = mInnerChartBottom;
+        if (style.hasXAxis()) result += style.getAxisThickness() / 2;
+        return result;
+    }
 
-		float result = axisCoordinate;
+    @Override
+    protected float defineStaticLabelsPosition(float axisCoordinate, int distanceToAxis) {
 
-		if (style.getXLabelsPositioning() == LabelPosition.INSIDE) { // Labels sit inside of chart
-			result -= distanceToAxis;
-			result -= style.getLabelsPaint().descent();
-			if (style.hasXAxis()) result -= style.getAxisThickness() / 2;
+        float result = axisCoordinate;
 
-		} else if (style.getXLabelsPositioning() == LabelPosition.OUTSIDE) { // Labels sit outside of chart
-			result += distanceToAxis;
-			result += style.getFontMaxHeight() - style.getLabelsPaint().descent();
-			if (style.hasXAxis()) result += style.getAxisThickness() / 2;
-		}
-		return result;
-	}
+        if (style.getXLabelsPositioning() == LabelPosition.INSIDE) { // Labels sit inside of chart
+            result -= distanceToAxis;
+            result -= style.getLabelsPaint().descent();
+            if (style.hasXAxis()) result -= style.getAxisThickness() / 2;
 
+        } else if (style.getXLabelsPositioning() == LabelPosition.OUTSIDE) { // Labels sit outside of chart
+            result += distanceToAxis;
+            result += style.getFontMaxHeight() - style.getLabelsPaint().descent();
+            if (style.hasXAxis()) result += style.getAxisThickness() / 2;
+        }
+        return result;
+    }
 
-	/**
-	 * Method called from onDraw method to draw XController data.
-	 *
-	 * @param canvas {@link android.graphics.Canvas} object to use while drawing the data.
-	 */
-	@Override
-	public void draw(Canvas canvas) {
+    @Override
+    public void draw(Canvas canvas) {
 
-		// Draw axis
-		if (style.hasXAxis())
-			canvas.drawLine(mInnerChartLeft, axisPosition, mInnerChartRight, axisPosition,
-					  style.getChartPaint());
+        // Draw axis
+        if (style.hasXAxis())
+            canvas.drawLine(mInnerChartLeft, axisPosition, mInnerChartRight, axisPosition,
+                    style.getChartPaint());
 
-		// Draw labels
-		if (style.getXLabelsPositioning() != LabelPosition.NONE) {
-			style.getLabelsPaint().setTextAlign(Align.CENTER);
+        // Draw labels
+        if (style.getXLabelsPositioning() != LabelPosition.NONE) {
+            style.getLabelsPaint().setTextAlign(Align.CENTER);
 
-			int nLabels = labels.size();
-			for (int i = 0; i < nLabels; i++) {
-				canvas.drawText(labels.get(i), labelsPos.get(i), labelsStaticPos,
-						  style.getLabelsPaint());
+            int nLabels = labels.size();
+            for (int i = 0; i < nLabels; i++) {
+                canvas.drawText(labels.get(i), labelsPos.get(i), labelsStaticPos,
+                        style.getLabelsPaint());
 
-			}
-		}
-	}
+            }
+        }
+    }
 
+    @Override
+    public float parsePos(int index, double value) {
 
-	/**
-	 * Based in a (real) value returns the associated screen point.
-	 *
-	 * @param index Index of label.
-	 * @param value Value to be parsed in display coordinate.
-	 *
-	 * @return Display's coordinate
-	 */
-	@Override
-	public float parsePos(int index, double value) {
-
-		if (handleValues) return (float) (mInnerChartLeft +
-				  (((value - minLabelValue) * screenStep) / (labelsValues.get(1) - minLabelValue)));
-		else return labelsPos.get(index);
-	}
+        if (handleValues)
+            return (float) (mInnerChartLeft
+                    + (((value - minLabelValue) * screenStep) / (labelsValues.get(1) - minLabelValue)));
+        else return labelsPos.get(index);
+    }
 
 
-	/**
-	 * Measure the necessary padding from the chart left border defining the
-	 * coordinate of the inner chart left border. Inner Chart refers only to the
-	 * area where chart data will be draw, excluding labels, axis, etc.
-	 *
-	 * @return Coordinate of the inner left side of the chart
-	 */
-	protected float measureInnerChartLeft(int left) {
+    /**
+     * Measure the necessary padding from the chart left border defining the
+     * coordinate of the inner chart left border. Inner Chart refers only to the
+     * area where chart data will be draw, excluding labels, axis, etc.
+     *
+     * @param left Left position of chart area
+     * @return Coordinate of the inner left side of the chart
+     */
+    protected float measureInnerChartLeft(int left) {
 
-		return (style.getXLabelsPositioning() != LabelPosition.NONE) ?
-				  style.getLabelsPaint().measureText(labels.get(0)) / 2 :
-				  left;
-	}
-
-
-	/**
-	 * Measure the necessary padding from the chart left border defining the
-	 * coordinate of the inner chart top border. Inner Chart refers only to the
-	 * area where chart data will be draw, excluding labels, axis, etc.
-	 *
-	 * @param top Top position of chart area
-	 *
-	 * @return Coordinate of the inner top side of the chart
-	 */
-	protected float measureInnerChartTop(int top) {
-
-		return top;
-	}
+        return (style.getXLabelsPositioning() != LabelPosition.NONE)
+                ? style.getLabelsPaint().measureText(labels.get(0)) / 2
+                : left;
+    }
 
 
-	/**
-	 * Measure the necessary padding from the chart left border defining the
-	 * coordinate of the inner chart right border. Inner Chart refers only to the
-	 * area where chart data will be draw, excluding labels, axis, etc.
-	 *
-	 * @param right Right position of chart area
-	 *
-	 * @return Coordinate of the inner right side of the chart
-	 */
-	protected float measureInnerChartRight(int right) {
+    /**
+     * Measure the necessary padding from the chart left border defining the
+     * coordinate of the inner chart top border. Inner Chart refers only to the
+     * area where chart data will be draw, excluding labels, axis, etc.
+     *
+     * @param top Top position of chart area
+     * @return Coordinate of the inner top side of the chart
+     */
+    protected float measureInnerChartTop(int top) {
 
-		// To manage horizontal width of the last axis label
-		float lastLabelWidth = 0;
-		// to fix possible crash on trying to access label by index -1.
-		if (labels.size() > 0) lastLabelWidth = style.getLabelsPaint().measureText(labels.get(labels.size() - 1));
-
-		float rightBorder = 0;
-		if (style.getXLabelsPositioning() != LabelPosition.NONE &&
-				  style.getAxisBorderSpacing() + mandatoryBorderSpacing < lastLabelWidth / 2)
-			rightBorder = lastLabelWidth / 2 - (style.getAxisBorderSpacing() + mandatoryBorderSpacing);
-
-		return right - rightBorder;
-	}
+        return top;
+    }
 
 
-	/**
-	 * Measure the necessary padding from the chart left border defining the
-	 * coordinate of the inner chart bottom border. Inner Chart refers only to the
-	 * area where chart data will be draw, excluding labels, axis, etc.
-	 *
-	 * @param bottom Bottom position of chart area
-	 *
-	 * @return Coordinate of the inner bottom side of the chart
-	 */
-	protected float measureInnerChartBottom(int bottom) {
+    /**
+     * Measure the necessary padding from the chart left border defining the
+     * coordinate of the inner chart right border. Inner Chart refers only to the
+     * area where chart data will be draw, excluding labels, axis, etc.
+     *
+     * @param right Right position of chart area
+     * @return Coordinate of the inner right side of the chart
+     */
+    protected float measureInnerChartRight(int right) {
 
-		float result = bottom;
+        // To manage horizontal width of the last axis label
+        float lastLabelWidth = 0;
+        // to fix possible crash on trying to access label by index -1.
+        if (labels.size() > 0)
+            lastLabelWidth = style.getLabelsPaint().measureText(labels.get(labels.size() - 1));
 
-		if (style.hasXAxis()) result -= style.getAxisThickness();
+        float rightBorder = 0;
+        if (style.getXLabelsPositioning() != LabelPosition.NONE
+                && style.getAxisBorderSpacing() + mandatoryBorderSpacing < lastLabelWidth / 2)
+            rightBorder = lastLabelWidth / 2 - (style.getAxisBorderSpacing() + mandatoryBorderSpacing);
 
-		if (style.getXLabelsPositioning() == LabelPosition.OUTSIDE)
-			result -= style.getFontMaxHeight() + style.getAxisLabelsSpacing();
+        return right - rightBorder;
+    }
 
-		return result;
-	}
+
+    /**
+     * Measure the necessary padding from the chart left border defining the
+     * coordinate of the inner chart bottom border. Inner Chart refers only to the
+     * area where chart data will be draw, excluding labels, axis, etc.
+     *
+     * @param bottom Bottom position of chart area
+     * @return Coordinate of the inner bottom side of the chart
+     */
+    protected float measureInnerChartBottom(int bottom) {
+
+        float result = bottom;
+
+        if (style.hasXAxis()) result -= style.getAxisThickness();
+
+        if (style.getXLabelsPositioning() == LabelPosition.OUTSIDE)
+            result -= style.getFontMaxHeight() + style.getAxisLabelsSpacing();
+
+        return result;
+    }
 
 }
