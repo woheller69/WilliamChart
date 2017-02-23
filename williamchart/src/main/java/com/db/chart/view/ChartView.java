@@ -52,7 +52,8 @@ import com.db.williamchart.R;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import static com.db.chart.Tools.checkNotNull;
+import static com.db.chart.util.Preconditions.checkNotNull;
+import static com.db.chart.util.Preconditions.checkPositionIndex;
 
 
 /**
@@ -481,7 +482,7 @@ public abstract class ChartView extends RelativeLayout {
      */
     public void show(int setIndex) {
 
-        data.get(setIndex).setVisible(true);
+        data.get(checkPositionIndex(setIndex, data.size())).setVisible(true);
         display();
     }
 
@@ -493,8 +494,7 @@ public abstract class ChartView extends RelativeLayout {
      */
     public void show(@NonNull Animation anim) {
 
-        checkNotNull(anim);
-        mAnim = anim;
+        mAnim = checkNotNull(anim);
         mAnim.setAnimationListener(mAnimListener);
         show();
     }
@@ -516,7 +516,7 @@ public abstract class ChartView extends RelativeLayout {
      */
     public void dismiss(int setIndex) {
 
-        data.get(setIndex).setVisible(false);
+        data.get(checkPositionIndex(setIndex, data.size())).setVisible(false);
         invalidate();
     }
 
@@ -527,9 +527,8 @@ public abstract class ChartView extends RelativeLayout {
      * @param anim Animation used to exit
      */
     public void dismiss(@NonNull Animation anim) {
-        checkNotNull(anim);
 
-        mAnim = anim;
+        mAnim = checkNotNull(anim);
         mAnim.setAnimationListener(mAnimListener);
 
         final Runnable endAction = mAnim.getEndAction();
@@ -577,10 +576,7 @@ public abstract class ChartView extends RelativeLayout {
      */
     public ChartView updateValues(int setIndex, float[] values) {
 
-        if (values.length != data.get(setIndex).size())
-            throw new IllegalArgumentException("New values size doesn't match current dataset size.");
-
-        data.get(setIndex).updateValues(values);
+        data.get(checkPositionIndex(setIndex, data.size())).updateValues(values);
         return this;
     }
 
@@ -621,8 +617,9 @@ public abstract class ChartView extends RelativeLayout {
      * @param rect  {@link Rect} containing the bounds of last clicked entry
      * @param value Value of the last entry clicked
      */
-    private void toggleTooltip(Rect rect, float value) {
+    private void toggleTooltip(@NonNull Rect rect, float value) {
 
+        checkNotNull(rect);
         if (!mTooltip.on()) {
             mTooltip.prepare(rect, value);
             showTooltip(mTooltip, true);
@@ -642,14 +639,12 @@ public abstract class ChartView extends RelativeLayout {
      * @param correctPos False if tooltip should not be forced to be inside ChartView.
      *                   You may want to take care of it.
      */
-    public void showTooltip(Tooltip tooltip, boolean correctPos) {
+    public void showTooltip(@NonNull Tooltip tooltip, boolean correctPos) {
 
+        checkNotNull(tooltip);
         if (correctPos) tooltip.correctPosition(mChartLeft, mChartTop, mChartRight, mChartBottom);
-
         if (tooltip.hasEnterAnimation()) tooltip.animateEnter();
-
         this.addTooltip(tooltip);
-
     }
 
 
@@ -686,8 +681,7 @@ public abstract class ChartView extends RelativeLayout {
      */
     private void dismissTooltip(@NonNull Tooltip tooltip) {
 
-        checkNotNull(tooltip);
-        dismissTooltip(tooltip, null, 0);
+        dismissTooltip(checkNotNull(tooltip), null, 0);
     }
 
 
@@ -848,8 +842,7 @@ public abstract class ChartView extends RelativeLayout {
      */
     void setOrientation(@NonNull Orientation orien) {
 
-        checkNotNull(orien);
-        mOrientation = orien;
+        mOrientation = checkNotNull(orien);
         if (mOrientation == Orientation.VERTICAL) {
             yRndr.setHandleValues(true);
         } else {
@@ -986,6 +979,7 @@ public abstract class ChartView extends RelativeLayout {
      */
     public ArrayList<Rect> getEntriesArea(int index) {
 
+        checkPositionIndex(index, mRegions.size());
         ArrayList<Rect> result = new ArrayList<>(mRegions.get(index).size());
         for (Region r : mRegions.get(index))
             result.add(getEntryRect(r));
@@ -1000,7 +994,8 @@ public abstract class ChartView extends RelativeLayout {
      * @param region Region covering {@link ChartEntry} area
      * @return {@link android.graphics.Rect} specifying the area of an {@link ChartEntry}
      */
-    Rect getEntryRect(Region region) {
+    Rect getEntryRect(@NonNull Region region) {
+        checkNotNull(region);
         // Subtract the view left/top padding to correct position
         return new Rect(region.getBounds().left - getPaddingLeft(),
                 region.getBounds().top - getPaddingTop(), region.getBounds().right - getPaddingLeft(),
@@ -1029,8 +1024,7 @@ public abstract class ChartView extends RelativeLayout {
      */
     public ChartView setYLabels(@NonNull YRenderer.LabelPosition position) {
 
-        checkNotNull(position);
-        style.yLabelsPositioning = position;
+        style.yLabelsPositioning = checkNotNull(position);
         return this;
     }
 
@@ -1044,8 +1038,7 @@ public abstract class ChartView extends RelativeLayout {
      */
     public ChartView setXLabels(@NonNull XRenderer.LabelPosition position) {
 
-        checkNotNull(position);
-        style.xLabelsPositioning = position;
+        style.xLabelsPositioning = checkNotNull(position);
         return this;
     }
 
@@ -1057,8 +1050,7 @@ public abstract class ChartView extends RelativeLayout {
      */
     public ChartView setLabelsFormat(@NonNull DecimalFormat format) {
 
-        checkNotNull(format);
-        style.labelsFormat = format;
+        style.labelsFormat = checkNotNull(format);
         return this;
     }
 
@@ -1094,8 +1086,7 @@ public abstract class ChartView extends RelativeLayout {
      */
     public ChartView setTypeface(@NonNull Typeface typeface) {
 
-        checkNotNull(typeface);
-        style.typeface = typeface;
+        style.typeface = checkNotNull(typeface);
         return this;
     }
 
@@ -1220,14 +1211,14 @@ public abstract class ChartView extends RelativeLayout {
      * @return {@link com.db.chart.view.ChartView} self-reference.
      */
     public ChartView setGrid(@IntRange(from = 0) int rows, @IntRange(from = 0) int columns,
-                             Paint paint) {
+                             @NonNull Paint paint) {
 
         if (rows < 0 || columns < 0)
             throw new IllegalArgumentException("Number of rows/columns can't be smaller than 0.");
 
         style.gridRows = rows;
         style.gridColumns = columns;
-        style.gridPaint = paint;
+        style.gridPaint = checkNotNull(paint);
         return this;
     }
 
@@ -1242,11 +1233,11 @@ public abstract class ChartView extends RelativeLayout {
      *                   If null the grid won't be drawn
      * @return {@link com.db.chart.view.ChartView} self-reference.
      */
-    public ChartView setValueThreshold(float startValue, float endValue, Paint paint) {
+    public ChartView setValueThreshold(float startValue, float endValue, @NonNull Paint paint) {
 
         mThresholdStartValues.add(startValue);
         mThresholdEndValues.add(endValue);
-        style.valueThresPaint = paint;
+        style.valueThresPaint = checkNotNull(paint);
         return this;
     }
 
@@ -1261,7 +1252,10 @@ public abstract class ChartView extends RelativeLayout {
      *                    If null the grid won't be drawn
      * @return {@link com.db.chart.view.ChartView} self-reference.
      */
-    public ChartView setValueThreshold(float[] startValues, float[] endValues, Paint paint) {
+    public ChartView setValueThreshold(@NonNull float[] startValues, @NonNull float[] endValues, @NonNull Paint paint) {
+
+        checkNotNull(startValues);
+        checkNotNull(endValues);
 
         mThresholdStartValues.clear();
         mThresholdEndValues.clear();
@@ -1269,7 +1263,7 @@ public abstract class ChartView extends RelativeLayout {
             mThresholdStartValues.add(startValues[i]);
             mThresholdEndValues.add(endValues[i]);
         }
-        style.valueThresPaint = paint;
+        style.valueThresPaint = checkNotNull(paint);
         return this;
     }
 
@@ -1284,11 +1278,11 @@ public abstract class ChartView extends RelativeLayout {
      *                   If null the grid won't be drawn
      * @return {@link com.db.chart.view.ChartView} self-reference.
      */
-    public ChartView setLabelThreshold(int startLabel, int endLabel, Paint paint) {
+    public ChartView setLabelThreshold(int startLabel, int endLabel, @NonNull Paint paint) {
 
         mThresholdStartLabels.add(startLabel);
         mThresholdEndLabels.add(endLabel);
-        style.labelThresPaint = paint;
+        style.labelThresPaint = checkNotNull(paint);
         return this;
     }
 
@@ -1303,7 +1297,10 @@ public abstract class ChartView extends RelativeLayout {
      *                    If null the grid won't be drawn
      * @return {@link com.db.chart.view.ChartView} self-reference.
      */
-    public ChartView setLabelThreshold(int[] startLabels, int[] endLabels, Paint paint) {
+    public ChartView setLabelThreshold(@NonNull int[] startLabels, @NonNull int[] endLabels, @NonNull Paint paint) {
+
+        checkNotNull(startLabels);
+        checkNotNull(endLabels);
 
         mThresholdStartLabels.clear();
         mThresholdEndLabels.clear();
@@ -1311,7 +1308,7 @@ public abstract class ChartView extends RelativeLayout {
             mThresholdStartLabels.add(startLabels[i]);
             mThresholdEndLabels.add(endLabels[i]);
         }
-        style.labelThresPaint = paint;
+        style.labelThresPaint = checkNotNull(paint);
         return this;
     }
 

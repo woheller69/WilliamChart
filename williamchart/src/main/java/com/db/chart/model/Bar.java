@@ -17,6 +17,9 @@
 package com.db.chart.model;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Size;
+
+import static com.db.chart.util.Preconditions.checkNotNull;
 
 
 /**
@@ -42,6 +45,12 @@ public class Bar extends ChartEntry {
     }
 
 
+    /*
+     * -------------
+	 * Getters
+	 * -------------
+	 */
+
     /**
      * If bar has gradient fill color defined.
      *
@@ -51,13 +60,6 @@ public class Bar extends ChartEntry {
 
         return mHasGradientColor;
     }
-
-
-    /*
-     * -------------
-	 * Getters
-	 * -------------
-	 */
 
 
     /**
@@ -90,7 +92,6 @@ public class Bar extends ChartEntry {
 	 * -------------
 	 */
 
-
     /**
      * Set gradient colors to the fill of the {@link com.db.chart.model.Bar}.
      *
@@ -98,13 +99,13 @@ public class Bar extends ChartEntry {
      * @param positions Position/order from which the colors will be place
      * @return {@link com.db.chart.model.Bar} self-reference.
      */
-    public Bar setGradientColor(@NonNull int colors[], float[] positions) {
+    public Bar setGradientColor(@NonNull @Size(min = 1) int colors[], float[] positions) {
 
-        if (colors == null || colors.length == 0)
-            throw new IllegalArgumentException("Colors argument can't be null or empty.");
+        if (colors.length == 0)
+            throw new IllegalArgumentException("Colors list cannot be empty");
 
         mHasGradientColor = true;
-        mGradientColors = colors;
+        mGradientColors = checkNotNull(colors);
         mGradientPositions = positions;
         return this;
     }

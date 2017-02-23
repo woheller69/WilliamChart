@@ -23,6 +23,7 @@ import android.animation.ValueAnimator;
 import android.graphics.Rect;
 import android.os.Build;
 import android.support.annotation.FloatRange;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.view.animation.DecelerateInterpolator;
 
@@ -31,6 +32,8 @@ import com.db.chart.model.ChartSet;
 import com.db.chart.view.ChartView;
 
 import java.util.ArrayList;
+
+import static com.db.chart.util.Preconditions.checkNotNull;
 
 
 /**
@@ -447,9 +450,9 @@ public class Animation {
      *                     values
      * @return {@link com.db.chart.animation.Animation} self-reference.
      */
-    public Animation setInterpolator(TimeInterpolator interpolator) {
+    public Animation setInterpolator(@NonNull TimeInterpolator interpolator) {
 
-        mInterpolator = interpolator;
+        mInterpolator = checkNotNull(interpolator);
         return this;
     }
 
@@ -475,7 +478,7 @@ public class Animation {
      * @param factor In case animation should show an overlap between entries
      * @return {@link com.db.chart.animation.Animation} self-reference.
      */
-    public Animation inSequence(float factor, int[] order) {
+    public Animation inSequence(@FloatRange(from = 0.f, to = 1.f) float factor, int[] order) {
 
         mOrder = order;
         inSequence(factor);
@@ -489,7 +492,7 @@ public class Animation {
      * @param factor In case animation should show an overlap between entries
      * @return {@link com.db.chart.animation.Animation} self-reference.
      */
-    public Animation inSequence(float factor) {
+    public Animation inSequence(@FloatRange(from = 0.f, to = 1.f) float factor) {
 
         mAnimateOverlapFactor = factor;
         return this;
@@ -546,9 +549,9 @@ public class Animation {
      * @param callback Callback to be called in every data update
      * @return {@link com.db.chart.animation.Animation} self-reference.
      */
-    public Animation setAnimationListener(ChartAnimationListener callback) {
+    public Animation setAnimationListener(@NonNull ChartAnimationListener callback) {
 
-        mCallback = callback;
+        mCallback = checkNotNull(callback);
         return this;
     }
 

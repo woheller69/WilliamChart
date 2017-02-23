@@ -138,7 +138,7 @@ public class LineSetTest {
     /**
      * Non null argument.
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NullPointerException.class)
     public void dashedNullException() {
 
         set.setDashed(null);
@@ -160,7 +160,7 @@ public class LineSetTest {
     /**
      * No negative index assigned to begin.
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IndexOutOfBoundsException.class)
     public void beginNegativeException() {
 
         set.beginAt(-1);
@@ -170,7 +170,7 @@ public class LineSetTest {
     /**
      * No index greater than set's size assigned to begin.
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IndexOutOfBoundsException.class)
     public void beginGreaterException() {
 
         set.beginAt(set.size() + 1);
@@ -190,7 +190,7 @@ public class LineSetTest {
     /**
      * No index greater than set's size assigned to end.
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IndexOutOfBoundsException.class)
     public void endGreaterException() {
 
         set.endAt(set.size() + 1);
@@ -211,7 +211,7 @@ public class LineSetTest {
     /**
      * No null dots drawable argument.
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NullPointerException.class)
     public void drawableNullException() {
 
         set.setDotsDrawable(null);

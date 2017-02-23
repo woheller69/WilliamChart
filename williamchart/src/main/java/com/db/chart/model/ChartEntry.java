@@ -24,7 +24,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 
-import static com.db.chart.Tools.checkNotNull;
+import static com.db.chart.util.Preconditions.checkNotNull;
 
 
 /**
@@ -228,13 +228,6 @@ public abstract class ChartEntry implements Comparable<ChartEntry> {
         return mShadowDx;
     }
 
-	
-	/*
-     * --------
-	 * Setters
-	 * --------
-	 */
-
     public float getShadowDy() {
 
         return mShadowDy;
@@ -244,6 +237,13 @@ public abstract class ChartEntry implements Comparable<ChartEntry> {
 
         return mShadowColor;
     }
+
+	
+	/*
+     * --------
+	 * Setters
+	 * --------
+	 */
 
     /**
      * Set the parsed display coordinates.

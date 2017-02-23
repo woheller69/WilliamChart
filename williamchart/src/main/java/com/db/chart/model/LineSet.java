@@ -23,8 +23,12 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
+import android.support.annotation.Size;
 
-import com.db.chart.Tools;
+import com.db.chart.util.Tools;
+
+import static com.db.chart.util.Preconditions.checkNotNull;
+import static com.db.chart.util.Preconditions.checkPositionIndex;
 
 
 /**
@@ -121,10 +125,10 @@ public class LineSet extends ChartSet {
         super();
         init();
 
-        if (labels == null || values == null)
-            throw new IllegalArgumentException("Labels or/and values can't be null.");
         if (labels.length != values.length)
             throw new IllegalArgumentException("Arrays size doesn't match.");
+        checkNotNull(labels);
+        checkNotNull(values);
 
         int nEntries = labels.length;
         for (int i = 0; i < nEntries; i++)
@@ -178,7 +182,7 @@ public class LineSet extends ChartSet {
      */
     public void addPoint(@NonNull Point point) {
 
-        this.addEntry(point);
+        this.addEntry(checkNotNull(point));
     }
 
 
@@ -200,10 +204,8 @@ public class LineSet extends ChartSet {
      */
     public LineSet setDashed(@NonNull float[] intervals) {
 
-        if (intervals == null) throw new IllegalArgumentException("Argument can't be null.");
-
         mIsDashed = true;
-        mDashedIntervals = intervals;
+        mDashedIntervals = checkNotNull(intervals);
         return this;
     }
 
@@ -450,13 +452,13 @@ public class LineSet extends ChartSet {
      * @param positions Position/order from which the colors will be place
      * @return {@link com.db.chart.model.LineSet} self-reference.
      */
-    public LineSet setGradientFill(@NonNull int colors[], float[] positions) {
+    public LineSet setGradientFill(@NonNull@Size(min = 1) int colors[], float[] positions) {
 
-        if (colors == null || colors.length == 0)
+        if (colors.length == 0)
             throw new IllegalArgumentException("Colors argument can't be null or empty.");
 
         mHasGradientFill = true;
-        mGradientColors = colors;
+        mGradientColors = checkNotNull(colors);
         mGradientPositions = positions;
 
         if (mColor == DEFAULT_COLOR) mColor = colors[0];
@@ -474,10 +476,7 @@ public class LineSet extends ChartSet {
      */
     public LineSet beginAt(@IntRange(from = 0) int index) {
 
-        if (index < 0 || index > size())
-            throw new IllegalArgumentException("Index is negative or greater than set's size.");
-
-        mBegin = index;
+        mBegin = checkPositionIndex(index, this.size());
         return this;
     }
 
@@ -491,12 +490,10 @@ public class LineSet extends ChartSet {
      */
     public LineSet endAt(@IntRange(from = 0) int index) {
 
-        if (index < 0 || index > size())
-            throw new IllegalArgumentException("Index is negative or greater than set's size.");
         if (index < mBegin) throw new IllegalArgumentException(
                 "Index cannot be lesser than the start entry " + "defined in beginAt(index).");
 
-        mEnd = index;
+        mEnd = checkPositionIndex(index, this.size());
         return this;
     }
 
@@ -578,8 +575,7 @@ public class LineSet extends ChartSet {
      */
     public LineSet setDotsDrawable(@NonNull Drawable drawable) {
 
-        if (drawable == null)
-            throw new IllegalArgumentException("Drawable argument can't be null.");
+        checkNotNull(drawable);
 
         for (ChartEntry e : getEntries())
             ((Point) e).setDrawable(drawable);

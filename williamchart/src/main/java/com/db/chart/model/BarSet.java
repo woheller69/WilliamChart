@@ -18,6 +18,9 @@ package com.db.chart.model;
 
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.annotation.Size;
+
+import static com.db.chart.util.Preconditions.checkNotNull;
 
 
 /**
@@ -38,10 +41,11 @@ public class BarSet extends ChartSet {
 
         super();
 
-        if (labels == null || values == null)
-            throw new IllegalArgumentException("Labels or/and values can't be null.");
         if (labels.length != values.length)
             throw new IllegalArgumentException("Arrays size doesn't match.");
+
+        checkNotNull(labels);
+        checkNotNull(values);
 
         int nEntries = labels.length;
         for (int i = 0; i < nEntries; i++)
@@ -68,17 +72,15 @@ public class BarSet extends ChartSet {
      */
     public void addBar(@NonNull Bar bar) {
 
-        this.addEntry(bar);
+        this.addEntry(checkNotNull(bar));
     }
 
-	
 	
 	/*
      * --------
 	 * Getters
 	 * --------
 	 */
-
 
     /**
      * Retrieve line's color.
@@ -91,13 +93,11 @@ public class BarSet extends ChartSet {
     }
 
 	
-	
 	/*
 	 * -------------
 	 * Setters
 	 * -------------
 	 */
-
 
     /**
      * Define the color of bars. Previously defined colors will be overridden.
@@ -120,10 +120,11 @@ public class BarSet extends ChartSet {
      * @param positions Position/order from which the colors will be place
      * @return {@link com.db.chart.model.BarSet} self-reference.
      */
-    public BarSet setGradientColor(@NonNull int colors[], float[] positions) {
+    public BarSet setGradientColor(@NonNull @Size(min = 1) int colors[], float[] positions) {
 
-        if (colors == null || colors.length == 0)
+        if (colors.length == 0)
             throw new IllegalArgumentException("Colors argument can't be null or empty.");
+        checkNotNull(colors);
 
         for (ChartEntry e : getEntries())
             ((Bar) e).setGradientColor(colors, positions);

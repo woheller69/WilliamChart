@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.db.chart;
+package com.db.chart.util;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -67,21 +67,6 @@ public final class Tools {
         drawable.draw(canvas);
 
         return bitmap;
-    }
-
-
-    /**
-     * Check if null reference.
-     *
-     * @param reference Reference to be checked.
-     * @param <T>       Not applicable
-     * @return If not null reference will be given back
-     */
-    public static <T> T checkNotNull(T reference) {
-        if (reference == null)
-            throw new NullPointerException();
-        else
-            return reference;
     }
 
 }

@@ -66,7 +66,7 @@ public class BarSetTest {
     /**
      * Gradient colors can't be null.
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NullPointerException.class)
     public void barGradientNullException() {
 
         bar.setGradientColor(null, new float[]{1.f, 2.f});

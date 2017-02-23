@@ -29,7 +29,7 @@ import android.graphics.Shader;
 import android.support.annotation.FloatRange;
 import android.util.AttributeSet;
 
-import com.db.chart.Tools;
+import com.db.chart.util.Tools;
 import com.db.chart.model.ChartSet;
 import com.db.chart.model.LineSet;
 import com.db.chart.model.Point;

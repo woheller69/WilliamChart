@@ -18,11 +18,13 @@ package com.db.chart.model;
 
 import android.animation.ValueAnimator;
 import android.support.annotation.FloatRange;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static com.db.chart.Tools.checkNotNull;
+import static com.db.chart.util.Preconditions.checkNotNull;
+import static com.db.chart.util.Preconditions.checkPositionIndex;
 
 
 /**
@@ -65,9 +67,9 @@ public abstract class ChartSet {
      *
      * @param e New entry.
      */
-    void addEntry(ChartEntry e) {
-        checkNotNull(e);
-        mEntries.add(e);
+    void addEntry(@NonNull ChartEntry e) {
+
+        mEntries.add(checkNotNull(e));
     }
 
 
@@ -76,12 +78,13 @@ public abstract class ChartSet {
      *
      * @param newValues New updated values to override current.
      */
-    public void updateValues(float[] newValues) {
+    public void updateValues(@NonNull float[] newValues) {
 
-        int nEntries = size();
-        if (newValues.length != nEntries) throw new IllegalArgumentException(
+        checkNotNull(newValues);
+        if (newValues.length != size()) throw new IllegalArgumentException(
                 "New set values given doesn't match previous " + "number of entries.");
 
+        int nEntries = size();
         for (int i = 0; i < nEntries; i++)
             setValue(i, newValues[i]);
     }
@@ -145,7 +148,7 @@ public abstract class ChartSet {
      */
     public ChartEntry getEntry(int index) {
 
-        return mEntries.get(index);
+        return mEntries.get(checkPositionIndex(index, size()));
     }
 
 
@@ -157,7 +160,7 @@ public abstract class ChartSet {
      */
     public float getValue(int index) {
 
-        return mEntries.get(index).getValue();
+        return mEntries.get(checkPositionIndex(index, size())).getValue();
     }
 
 
@@ -169,7 +172,7 @@ public abstract class ChartSet {
      */
     public String getLabel(int index) {
 
-        return mEntries.get(index).getLabel();
+        return mEntries.get(checkPositionIndex(index, size())).getLabel();
     }
 
 
@@ -269,7 +272,7 @@ public abstract class ChartSet {
      */
     private void setValue(int index, float value) {
 
-        mEntries.get(index).setValue(value);
+        mEntries.get(checkPositionIndex(index, size())).setValue(value);
     }
 
     /**
