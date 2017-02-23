@@ -92,17 +92,17 @@ public class LineFragment extends Fragment implements View.OnClickListener {
         gridPaint.setAntiAlias(true);
         gridPaint.setStrokeWidth(Tools.fromDpToPx(.75f));
 
-        mChart.setBorderSpacing(Tools.fromDpToPx(0))
+        mChart.setBorderSpacing((int) Tools.fromDpToPx(0))
                 .setXLabels(AxisRenderer.LabelPosition.OUTSIDE)
                 .setLabelsColor(Color.parseColor("#304a00"))
                 .setYLabels(AxisRenderer.LabelPosition.NONE)
                 .setXAxis(false)
                 .setYAxis(false)
-                .setGrid(ChartView.GridType.VERTICAL, 1, 7, gridPaint)
+                .setGrid(1, 7, gridPaint)
                 .setValueThreshold(80f, 80f, thresPaint)
                 .setAxisBorderValues(0, 110);
 
-        mChart.show(new Animation().setStartPoint(0, .5f));
+        mChart.show(new Animation().fromXY(0, .5f));
 
         return layout;
     }

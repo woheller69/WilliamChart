@@ -84,7 +84,7 @@ public class StackedFragment extends Fragment implements View.OnClickListener {
                 .setYLabels(AxisRenderer.LabelPosition.NONE)
                 .setValueThreshold(89.f, 89.f, thresPaint);
 
-        mChart.show(new Animation().setOverlap(.5f, new int[]{0, 1, 2, 3, 4, 5, 6}));
+        mChart.show(new Animation().inSequence(.5f, new int[]{0, 1, 2, 3, 4, 5, 6}));
 
         return layout;
     }

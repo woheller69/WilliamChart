@@ -71,7 +71,7 @@ public class BarFragment extends Fragment implements View.OnClickListener {
                 .setYLabels(AxisRenderer.LabelPosition.NONE)
                 .setXAxis(false)
                 .setYAxis(false);
-        mChart.show(new Animation().setEasing(new BounceInterpolator()));
+        mChart.show(new Animation().setInterpolator(new BounceInterpolator()));
 
         return layout;
     }
