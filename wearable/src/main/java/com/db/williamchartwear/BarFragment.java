@@ -24,7 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.BounceInterpolator;
 
-import com.db.chart.Tools;
+import com.db.chart.util.Tools;
 import com.db.chart.animation.Animation;
 import com.db.chart.model.BarSet;
 import com.db.chart.renderer.AxisRenderer;

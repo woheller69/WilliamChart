@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.widget.TextView;
 
-import com.db.chart.Tools;
+import com.db.chart.util.Tools;
 import com.db.chart.animation.Animation;
 import com.db.chart.model.LineSet;
 import com.db.chart.renderer.AxisRenderer;

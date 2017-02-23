@@ -5,7 +5,7 @@ import android.graphics.Paint;
 import android.support.v7.widget.CardView;
 import android.view.animation.AccelerateInterpolator;
 
-import com.db.chart.Tools;
+import com.db.chart.util.Tools;
 import com.db.chart.animation.Animation;
 import com.db.chart.model.BarSet;
 import com.db.chart.view.HorizontalStackBarChartView;
