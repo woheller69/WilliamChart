@@ -23,6 +23,7 @@ import android.animation.ValueAnimator;
 import android.graphics.Rect;
 import android.os.Build;
 import android.support.annotation.FloatRange;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.view.animation.DecelerateInterpolator;
 
@@ -31,6 +32,8 @@ import com.db.chart.model.ChartSet;
 import com.db.chart.view.ChartView;
 
 import java.util.ArrayList;
+
+import static com.db.chart.util.Preconditions.checkNotNull;
 
 
 /**
@@ -43,7 +46,7 @@ public class Animation {
     /**
      * Default animation duration
      */
-    private final static int DEFAULT_DURATION = 1000;
+    private static final int DEFAULT_DURATION = 1000;
 
     /**
      * Task that handles with animation updates
@@ -141,7 +144,6 @@ public class Animation {
         init(duration);
     }
 
-
     private void init(int duration) {
 
         mAnimators = new ArrayList<>();
@@ -179,11 +181,11 @@ public class Animation {
             endCoords = mData.get(i).getScreenPoints();
             for (int j = 0; j < nEntries; j++) {
 
-                startCoords[j][0] = chartView.getOrientation() == ChartView.Orientation.VERTICAL ?
-                        mData.get(i).getEntry(j).getX() : chartView.getZeroPosition();
+                startCoords[j][0] = chartView.getOrientation() == ChartView.Orientation.VERTICAL
+                        ? mData.get(i).getEntry(j).getX() : chartView.getZeroPosition();
 
-                startCoords[j][1] = chartView.getOrientation() == ChartView.Orientation.HORIZONTAL ?
-                        mData.get(i).getEntry(j).getY() : chartView.getZeroPosition();
+                startCoords[j][1] = chartView.getOrientation() == ChartView.Orientation.HORIZONTAL
+                        ? mData.get(i).getEntry(j).getY() : chartView.getZeroPosition();
             }
 
             startValues.add(startCoords);
@@ -221,6 +223,8 @@ public class Animation {
      * <p>
      * values and to get the {@link ChartSet} containing the target values
      *
+     * @param start Animation start display coordinates
+     * @param end   Animation end display coordinates
      * @return Initial chart data state before starting animation
      */
     public ArrayList<ChartSet> prepareUpdateAnimation(ArrayList<float[][]> start,
@@ -257,7 +261,7 @@ public class Animation {
      * @return Given values modified with new starting position.
      */
     ArrayList<float[][]> applyStartingPosition(ArrayList<float[][]> values, Rect area,
-                                                         float xStartFactor, float yStartFactor) {
+                                               float xStartFactor, float yStartFactor) {
 
         for (int i = 0; i < values.size(); i++) {
             for (int j = 0; j < values.get(i).length; j++) {
@@ -285,7 +289,7 @@ public class Animation {
 
         mAnimators.addAll(animateEntries(start, end));
 
-        for (ChartSet set : mData){ // Animate alpha
+        for (ChartSet set : mData) { // Animate alpha
             animator = set.animateAlpha(mAlpha, set.getAlpha());
             animator.setDuration(mDuration);
             animator.setInterpolator(mInterpolator);
@@ -360,9 +364,10 @@ public class Animation {
      * @param size          Number of entries
      * @param duration      Complete animation duration
      * @param overlapFactor Overlap factor between entries
+     * @param order         Entries animation order
      * @return Array containing the animation delays for each entry.
      */
-    long[] calculateEntriesInitTime(int size, long duration, float overlapFactor, int[] order){
+    long[] calculateEntriesInitTime(int size, long duration, float overlapFactor, int[] order) {
 
         if (overlapFactor != 1)
             duration = (long) (duration + duration * overlapFactor);
@@ -386,14 +391,14 @@ public class Animation {
 
 
     /**
-     *  Calculate each individual entry duration.
+     * Calculate each individual entry duration.
      *
      * @param size          Number of entries
      * @param duration      Complete animation duration
      * @param overlapFactor Overlap factor between entries
      * @return Array containing the animation duration for each entry.
      */
-    long calculateEntriesDuration(int size, long duration, float overlapFactor){
+    long calculateEntriesDuration(int size, long duration, float overlapFactor) {
 
         // Calculates the expected duration as there was with no overlap (factor = 0)
         final float noOverlapDuration = duration / size;
@@ -445,9 +450,9 @@ public class Animation {
      *                     values
      * @return {@link com.db.chart.animation.Animation} self-reference.
      */
-    public Animation setInterpolator(TimeInterpolator interpolator) {
+    public Animation setInterpolator(@NonNull TimeInterpolator interpolator) {
 
-        mInterpolator = interpolator;
+        mInterpolator = checkNotNull(interpolator);
         return this;
     }
 
@@ -473,7 +478,7 @@ public class Animation {
      * @param factor In case animation should show an overlap between entries
      * @return {@link com.db.chart.animation.Animation} self-reference.
      */
-    public Animation inSequence(float factor, int[] order) {
+    public Animation inSequence(@FloatRange(from = 0.f, to = 1.f) float factor, int[] order) {
 
         mOrder = order;
         inSequence(factor);
@@ -484,9 +489,10 @@ public class Animation {
     /**
      * Entries will animate sequentially instead of all at the same time.
      *
+     * @param factor In case animation should show an overlap between entries
      * @return {@link com.db.chart.animation.Animation} self-reference.
      */
-    public Animation inSequence(float factor) {
+    public Animation inSequence(@FloatRange(from = 0.f, to = 1.f) float factor) {
 
         mAnimateOverlapFactor = factor;
         return this;
@@ -516,7 +522,7 @@ public class Animation {
      * @return {@link com.db.chart.animation.Animation} self-reference.
      */
     public Animation fromXY(@FloatRange(from = -1.f, to = 1.f) float xFactor,
-                                   @FloatRange(from = -1.f, to = 1.f) float yFactor) {
+                            @FloatRange(from = -1.f, to = 1.f) float yFactor) {
 
         mStartXFactor = xFactor;
         mStartYFactor = yFactor;
@@ -541,10 +547,11 @@ public class Animation {
      * Callback to use in every chart data update.
      *
      * @param callback Callback to be called in every data update
+     * @return {@link com.db.chart.animation.Animation} self-reference.
      */
-    public Animation setAnimationListener(ChartAnimationListener callback) {
+    public Animation setAnimationListener(@NonNull ChartAnimationListener callback) {
 
-        mCallback = callback;
+        mCallback = checkNotNull(callback);
         return this;
     }
 
@@ -553,6 +560,7 @@ public class Animation {
      * Animate from a specific color until the already set entry's color.
      *
      * @param color Color to animate from
+     * @return {@link com.db.chart.animation.Animation} self-reference.
      */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public Animation fromColor(int color) {

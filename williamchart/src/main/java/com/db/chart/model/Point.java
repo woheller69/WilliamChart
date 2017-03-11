@@ -21,7 +21,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 
-import com.db.chart.Tools;
+import com.db.chart.util.Tools;
 
 
 /**
@@ -29,191 +29,180 @@ import com.db.chart.Tools;
  */
 public class Point extends ChartEntry {
 
-	private static final String TAG = "chart.model.Point";
+    private static final String TAG = "chart.model.Point";
 
 
-	/** Defaults **/
-	private static final int DEFAULT_COLOR = -16777216;
+    /**
+     * Defaults
+     **/
+    private static final int DEFAULT_COLOR = -16777216;
 
-	private static final float DOTS_THICKNESS = 4;
+    private static final float DOTS_THICKNESS = 4;
 
-	private static final float DOTS_RADIUS = 3;
-
-
-	/** Dot variables */
-	private boolean mHasStroke;
-
-	private float mStrokeThickness;
-
-	private int mStrokeColor;
+    private static final float DOTS_RADIUS = 3;
 
 
-	/** Radius */
-	private float mRadius;
+    /**
+     * Dot variables
+     */
+    private boolean mHasStroke;
+
+    private float mStrokeThickness;
+
+    private int mStrokeColor;
 
 
-	/** Dots drawable background */
-	private Drawable mDrawable;
+    /**
+     * Radius
+     */
+    private float mRadius;
 
 
-	/**
-	 * Constructor.
-	 *
-	 * @param label
-	 * @param value
-	 */
-	public Point(String label, float value) {
-
-		super(label, value);
-
-		isVisible = false;
-
-		mRadius = Tools.fromDpToPx(DOTS_THICKNESS);
-
-		mHasStroke = false;
-		mStrokeThickness = Tools.fromDpToPx(DOTS_RADIUS);
-		mStrokeColor = DEFAULT_COLOR;
-
-		mDrawable = null;
-	}
+    /**
+     * Dots drawable background
+     */
+    private Drawable mDrawable;
 
 
-	/**
-	 * Whether the Point has stroke defined or not.
-	 *
-	 * @return true if point has stroke define.
-	 */
-	public boolean hasStroke() {
+    public Point(String label, float value) {
 
-		return mHasStroke;
-	}
+        super(label, value);
 
+        isVisible = false;
+
+        mRadius = Tools.fromDpToPx(DOTS_THICKNESS);
+
+        mHasStroke = false;
+        mStrokeThickness = Tools.fromDpToPx(DOTS_RADIUS);
+        mStrokeColor = DEFAULT_COLOR;
+
+        mDrawable = null;
+    }
 
 
     /*
-	 * --------
+     * --------
 	 * Getters
 	 * --------
 	 */
 
+    /**
+     * Whether the Point has stroke defined or not.
+     *
+     * @return true if point has stroke define.
+     */
+    public boolean hasStroke() {
 
-	/**
-	 * Retrieve the point's stroke thickness.
-	 *
-	 * @return point's stroke thickness.
-	 */
-	public float getStrokeThickness() {
-
-		return mStrokeThickness;
-	}
-
-
-	/**
-	 * Retrieve the point's radius.
-	 *
-	 * @return point radius.
-	 */
-	public float getRadius() {
-
-		return mRadius;
-	}
+        return mHasStroke;
+    }
 
 
-	/**
-	 * Retrieve point's stroke color.
-	 *
-	 * @return point's stroke color.
-	 */
-	public int getStrokeColor() {
+    /**
+     * Retrieve the point's stroke thickness.
+     *
+     * @return point's stroke thickness.
+     */
+    public float getStrokeThickness() {
 
-		return mStrokeColor;
-	}
+        return mStrokeThickness;
+    }
 
+    /**
+     * Define specific thickness to point's stroke.
+     *
+     * @param thickness Grid thickness. Can't be equal or less than 0
+     * @return {@link com.db.chart.model.Point} self-reference.
+     */
+    public Point setStrokeThickness(@FloatRange(from = 0.f) float thickness) {
 
-	/**
-	 * Retrieve point's drawable.
-	 *
-	 * @return {@link android.graphics.drawable.Drawable} to be displayed.
-	 */
-	public Drawable getDrawable() {
+        if (thickness < 0) throw new IllegalArgumentException("Grid thickness < 0.");
 
-		return mDrawable;
-	}
+        isVisible = true;
+        mHasStroke = true;
+        mStrokeThickness = thickness;
+        return this;
+    }
 
+    /**
+     * Retrieve the point's radius.
+     *
+     * @return point radius.
+     */
+    public float getRadius() {
+
+        return mRadius;
+    }
+
+    /**
+     * Define specific radius to point.
+     *
+     * @param radius value of radius starting from 0.
+     * @return {@link com.db.chart.model.Point} self-reference.
+     */
+    public Point setRadius(@FloatRange(from = 0.f) float radius) {
+
+        if (radius < 0.f) throw new IllegalArgumentException("Dot radius can't be < 0.");
+
+        isVisible = true;
+        mRadius = radius;
+        return this;
+    }
+
+    /**
+     * Retrieve point's stroke color.
+     *
+     * @return point's stroke color.
+     */
+    public int getStrokeColor() {
+
+        return mStrokeColor;
+    }
 
 
     /*
-	 * --------
+     * --------
 	 * Setters
 	 * --------
 	 */
 
+    /**
+     * Define point's stroke color.
+     *
+     * @param color The color.
+     * @return {@link com.db.chart.model.Point} self-reference.
+     */
+    public Point setStrokeColor(@ColorInt int color) {
 
-	/**
-	 * Define specific radius to point.
-	 *
-	 * @param radius value of radius starting from 0.
-	 *
-	 * @return {@link com.db.chart.model.Point} self-reference.
-	 */
-	public Point setRadius(@FloatRange(from = 0.f) float radius) {
+        isVisible = true;
+        mHasStroke = true;
+        mStrokeColor = color;
+        return this;
+    }
 
-		if (radius < 0.f) throw new IllegalArgumentException("Dot radius can't be < 0.");
+    /**
+     * Retrieve point's drawable.
+     *
+     * @return {@link android.graphics.drawable.Drawable} to be displayed.
+     */
+    public Drawable getDrawable() {
 
-		isVisible = true;
-		mRadius = radius;
-		return this;
-	}
+        return mDrawable;
+    }
 
+    /**
+     * Define a drawable to be drawn instead of the usual dot.
+     *
+     * @param drawable The drawable.
+     * @return {@link com.db.chart.model.Point} self-reference.
+     */
+    public Point setDrawable(@NonNull Drawable drawable) {
 
-	/**
-	 * Define specific thickness to point's stroke.
-	 *
-	 * @param thickness Grid thickness. Can't be equal or less than 0
-	 *
-	 * @return {@link com.db.chart.model.Point} self-reference.
-	 */
-	public Point setStrokeThickness(@FloatRange(from = 0.f) float thickness) {
+        if (drawable == null)
+            throw new IllegalArgumentException("Drawable argument can't be null.");
 
-		if (thickness < 0) throw new IllegalArgumentException("Grid thickness < 0.");
-
-		isVisible = true;
-		mHasStroke = true;
-		mStrokeThickness = thickness;
-		return this;
-	}
-
-
-	/**
-	 * Define point's stroke color.
-	 *
-	 * @param color The color.
-	 *
-	 * @return {@link com.db.chart.model.Point} self-reference.
-	 */
-	public Point setStrokeColor(@ColorInt int color) {
-
-		isVisible = true;
-		mHasStroke = true;
-		mStrokeColor = color;
-		return this;
-	}
-
-
-	/**
-	 * Define a drawable to be drawn instead of the usual dot.
-	 *
-	 * @param drawable The drawable.
-	 *
-	 * @return {@link com.db.chart.model.Point} self-reference.
-	 */
-	public Point setDrawable(@NonNull Drawable drawable) {
-
-		if (drawable == null) throw new IllegalArgumentException("Drawable argument can't be null.");
-
-		isVisible = true;
-		mDrawable = drawable;
-		return this;
-	}
+        isVisible = true;
+        mDrawable = drawable;
+        return this;
+    }
 
 }

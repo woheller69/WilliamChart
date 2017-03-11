@@ -14,19 +14,19 @@ import org.junit.runner.RunWith;
 @LargeTest
 public class ChartsTest {
 
-	@Rule
-	public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
+    @Rule
+    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
 
 
-	@Before
-	public void setUp() {
+    @Before
+    public void setUp() {
 
-	}
+    }
 
 
-	@Test
-	public void emptyTest() {
+    @Test
+    public void emptyTest() {
 
-	}
+    }
 
 }

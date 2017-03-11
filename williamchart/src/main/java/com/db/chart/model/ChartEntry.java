@@ -21,9 +21,10 @@ import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 
-import static com.db.chart.Tools.checkNotNull;
+import static com.db.chart.util.Preconditions.checkNotNull;
 
 
 /**
@@ -31,245 +32,278 @@ import static com.db.chart.Tools.checkNotNull;
  */
 public abstract class ChartEntry implements Comparable<ChartEntry> {
 
-	/** Default bar color */
-	private static final int DEFAULT_COLOR = -16777216;
+    /**
+     * Default bar color
+     */
+    private static final int DEFAULT_COLOR = -16777216;
+
+    boolean isVisible;
+
+    /**
+     * Input from user
+     */
+    private final String mLabel;
+
+    /**
+     * Defines if entry is visible
+     */
+    private float mValue;
+
+    /**
+     * Display coordinates
+     */
+    private float mX;
+
+    private float mY;
+
+    /**
+     * Bar color
+     */
+    private int mColor;
+
+    /**
+     * Shadow variables
+     */
+    private float mShadowRadius;
+
+    private float mShadowDx;
+
+    private float mShadowDy;
+
+    private int[] mShadowColor;
 
 
-	/** Input from user */
-	final private String mLabel;
+    ChartEntry(String label, float value) {
 
-	/** Defines if entry is visible */
-	boolean isVisible;
+        mLabel = label;
+        mValue = value;
 
-	private float mValue;
+        mColor = DEFAULT_COLOR;
 
-	/** Display coordinates */
-	private float mX;
-
-	private float mY;
-
-	/** Bar color */
-	private int mColor;
-
-	/** Shadow variables */
-	private float mShadowRadius;
-
-	private float mShadowDx;
-
-	private float mShadowDy;
-
-	private int[] mShadowColor;
+        mShadowRadius = 0;
+        mShadowDx = 0;
+        mShadowDy = 0;
+        mShadowColor = new int[4];
+    }
 
 
-	/**
-	 * Constructor.
-	 *
-	 * @param label
-	 * @param value
-	 */
-	ChartEntry(String label, float value) {
+    /**
+     * If entry is currently visible (displayed).
+     *
+     * @return True if entry is visible in display, False otherwise.
+     */
+    public boolean isVisible() {
 
-		mLabel = label;
-		mValue = value;
+        return isVisible;
+    }
 
-		mColor = DEFAULT_COLOR;
+    /**
+     * Define whether this entry will be drawn or not.
+     *
+     * @param visible True if entry should be displayed.
+     */
+    public void setVisible(boolean visible) {
 
-		mShadowRadius = 0;
-		mShadowDx = 0;
-		mShadowDy = 0;
-		mShadowColor = new int[4];
-	}
-
-
-	public boolean isVisible() {
-
-		return isVisible;
-	}
+        isVisible = visible;
+    }
 
 
-	public boolean hasShadow() {
+    /**
+     * @return True if entry has shadow defined, False otherwise.
+     */
+    public boolean hasShadow() {
 
-		return mShadowRadius != 0;
-	}
-
-
-	public ValueAnimator animateXY(float x0, float y0, float x1, float y1){
-
-		final ValueAnimator animator = ValueAnimator.ofPropertyValuesHolder(
-				PropertyValuesHolder.ofFloat("x", x0, x1),
-				PropertyValuesHolder.ofFloat("y", y0, y1));
-		animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-			@Override
-			public void onAnimationUpdate(ValueAnimator animation) {
-				mX = (float) animation.getAnimatedValue("x");
-				mY = (float) animation.getAnimatedValue("y");
-			}
-		});
-		mX = x0;
-		mY = y0;
-		return animator;
-	}
+        return mShadowRadius != 0;
+    }
 
 
-	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-	public ValueAnimator animateColor(int color0, int color1){
+    /**
+     * Animate entry between two positions.
+     *
+     * @param x0 Start x position
+     * @param y0 Start y position
+     * @param x1 End x position
+     * @param y1 End y position
+     * @return {@link ValueAnimator} object responsible to handle animation.
+     */
+    public ValueAnimator animateXY(float x0, float y0, float x1, float y1) {
 
-		final ValueAnimator animator = ValueAnimator.ofArgb(color0, color1);
-		animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-			@Override
-			public void onAnimationUpdate(ValueAnimator animation) {
-				mColor = (int) animation.getAnimatedValue();
-			}
-		});
-		mColor = color0;
-		return animator;
-	}
-
-
-	/*
-	 * --------
-	 * Getters
-	 * --------
-	 */
-
-
-	public String getLabel() {
-
-		return mLabel;
-	}
-
-
-	public float getValue() {
-
-		return mValue;
-	}
+        final ValueAnimator animator = ValueAnimator.ofPropertyValuesHolder(
+                PropertyValuesHolder.ofFloat("x", x0, x1),
+                PropertyValuesHolder.ofFloat("y", y0, y1));
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                mX = (float) animation.getAnimatedValue("x");
+                mY = (float) animation.getAnimatedValue("y");
+            }
+        });
+        mX = x0;
+        mY = y0;
+        return animator;
+    }
 
 
-	public float getX() {
+    /**
+     * Animate entry color.
+     *
+     * @param color0 Start color resource.
+     * @param color1 End color resource.
+     * @return {@link ValueAnimator} responsible to handle animation.
+     */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public ValueAnimator animateColor(int color0, int color1) {
 
-		return mX;
-	}
-
-
-	public float getY() {
-
-		return mY;
-	}
-
-
-	public int getColor() {
-
-		return mColor;
-	}
-
-
-	public float getShadowRadius() {
-
-		return mShadowRadius;
-	}
+        final ValueAnimator animator = ValueAnimator.ofArgb(color0, color1);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                mColor = (int) animation.getAnimatedValue();
+            }
+        });
+        mColor = color0;
+        return animator;
+    }
 
 
-	public float getShadowDx() {
+    /*
+    * --------
+    * Getters
+    * --------
+    */
 
-		return mShadowDx;
-	}
+    public String getLabel() {
 
+        return mLabel;
+    }
 
-	public float getShadowDy() {
+    public float getValue() {
 
-		return mShadowDy;
-	}
+        return mValue;
+    }
 
+    /**
+     * Set new entry value.
+     *
+     * @param value New value
+     */
+    public void setValue(float value) {
 
-	public int[] getShadowColor() {
+        mValue = value;
+    }
 
-		return mShadowColor;
-	}
+    public float getX() {
 
+        return mX;
+    }
+
+    public float getY() {
+
+        return mY;
+    }
+
+    public int getColor() {
+
+        return mColor;
+    }
+
+    /**
+     * Define the color of the entry.
+     *
+     * @param color Color to be set.
+     */
+    public void setColor(@ColorInt int color) {
+
+        isVisible = true;
+        mColor = color;
+    }
+
+    public float getShadowRadius() {
+
+        return mShadowRadius;
+    }
+
+    public float getShadowDx() {
+
+        return mShadowDx;
+    }
+
+    public float getShadowDy() {
+
+        return mShadowDy;
+    }
+
+    public int[] getShadowColor() {
+
+        return mShadowColor;
+    }
 
 	
 	/*
-	 * --------
+     * --------
 	 * Setters
 	 * --------
 	 */
 
+    /**
+     * Set the parsed display coordinates.
+     *
+     * @param x display x coordinate.
+     * @param y display y coordinate.
+     */
+    public void setCoordinates(float x, float y) {
 
-	/**
-	 * Set new entry value.
-	 *
-	 * @param value New value
-	 */
-	public void setValue(float value) {
-
-		mValue = value;
-	}
-
-
-	/**
-	 * Set the parsed display coordinates.
-	 *
-	 * @param x display x coordinate.
-	 * @param y display y coordinate.
-	 */
-	public void setCoordinates(float x, float y) {
-
-		mX = x;
-		mY = y;
-	}
+        mX = x;
+        mY = y;
+    }
 
 
-	/**
-	 * Define the color of the entry.
-	 *
-	 * @param color Color to be set.
-	 */
-	public void setColor(@ColorInt int color) {
+    /**
+     * Define entry shadow
+     *
+     * @param radius Radius
+     * @param dx     Dx
+     * @param dy     Dy
+     * @param color  Color
+     */
+    public void setShadow(float radius, float dx, float dy, @ColorInt int color) {
 
-		isVisible = true;
-		mColor = color;
-	}
-
-
-	/**
-	 * Define whether this entry will be drawn or not.
-	 *
-	 * @param visible True if entry should be displayed.
-	 */
-	public void setVisible(boolean visible) {
-
-		isVisible = visible;
-	}
+        mShadowRadius = radius;
+        mShadowDx = dx;
+        mShadowDy = dy;
+        mShadowColor[0] = Color.alpha(color);
+        mShadowColor[1] = Color.red(color);
+        mShadowColor[2] = Color.blue(color);
+        mShadowColor[3] = Color.green(color);
+    }
 
 
-	/**
-	 * @param radius
-	 * @param dx
-	 * @param dy
-	 * @param color
-	 */
-	public void setShadow(float radius, float dx, float dy, @ColorInt int color) {
+    /**
+     * Convert object into a printable text.
+     *
+     * @return Object's text description
+     */
+    public String toString() {
 
-		mShadowRadius = radius;
-		mShadowDx = dx;
-		mShadowDy = dy;
-		mShadowColor[0] = Color.alpha(color);
-		mShadowColor[1] = Color.red(color);
-		mShadowColor[2] = Color.blue(color);
-		mShadowColor[3] = Color.green(color);
-	}
+        return "Label=" + mLabel + " \n" + "Value=" + mValue + "\n"
+                + "X = " + mX + "\n" + "Y = " + mY;
+    }
 
 
-	public String toString() {
-
-		return "Label=" + mLabel + " \n" + "Value=" + mValue + "\n" +
-				  "X = " + mX + "\n" + "Y = " + mY;
-	}
-
-
-	public int compareTo(ChartEntry other) {
-		checkNotNull(other);
-		return Float.compare(this.getValue(), other.getValue());
-	}
+    /**
+     * Compare given entry with itself.
+     *
+     * @param other {@link ChartEntry} object to be compared with.
+     * @return the value {@code 0} if {@code f1} is
+     * numerically equal to {@code f2}; a value less than
+     * {@code 0} if {@code f1} is numerically less than
+     * {@code f2}; and a value greater than {@code 0}
+     * if {@code f1} is numerically greater than
+     * {@code f2}.
+     */
+    public int compareTo(@NonNull ChartEntry other) {
+        checkNotNull(other);
+        return Float.compare(this.getValue(), other.getValue());
+    }
 
 }

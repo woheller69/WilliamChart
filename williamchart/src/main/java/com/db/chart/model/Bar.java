@@ -17,6 +17,9 @@
 package com.db.chart.model;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Size;
+
+import static com.db.chart.util.Preconditions.checkNotNull;
 
 
 /**
@@ -24,96 +27,87 @@ import android.support.annotation.NonNull;
  */
 public class Bar extends ChartEntry {
 
-	private static final String TAG = "chart.model.Bar";
+    private static final String TAG = "chart.model.Bar";
 
-	private boolean mHasGradientColor;
+    private boolean mHasGradientColor;
 
-	private int[] mGradientColors;
+    private int[] mGradientColors;
 
-	private float[] mGradientPositions;
-
-
-	/**
-	 * Constructor.
-	 *
-	 * @param label
-	 * @param value
-	 */
-	public Bar(String label, float value) {
-
-		super(label, value);
-
-		isVisible = true;
-		mHasGradientColor = false;
-	}
+    private float[] mGradientPositions;
 
 
-	/**
-	 * If bar has gradient fill color defined.
-	 *
-	 * @return true if gradient fill property defined.
-	 */
-	public boolean hasGradientColor() {
+    public Bar(String label, float value) {
 
-		return mHasGradientColor;
-	}
+        super(label, value);
+
+        isVisible = true;
+        mHasGradientColor = false;
+    }
 
 
     /*
-	 * -------------
+     * -------------
 	 * Getters
 	 * -------------
 	 */
 
+    /**
+     * If bar has gradient fill color defined.
+     *
+     * @return true if gradient fill property defined.
+     */
+    public boolean hasGradientColor() {
 
-	/**
-	 * Retrieve set of colors defining the gradient of bar's fill.
-	 * Gradient fill property must have been previously defined.
-	 *
-	 * @return Gradient colors array.
-	 */
-	public int[] getGradientColors() {
-
-		return mGradientColors;
-	}
+        return mHasGradientColor;
+    }
 
 
-	/**
-	 * Retrieve set of positions to define the gradient of bar's fill.
-	 * Gradient fill property must have been previously defined.
-	 *
-	 * @return Gradient positions.
-	 */
-	public float[] getGradientPositions() {
+    /**
+     * Retrieve set of colors defining the gradient of bar's fill.
+     * Gradient fill property must have been previously defined.
+     *
+     * @return Gradient colors array.
+     */
+    public int[] getGradientColors() {
 
-		return mGradientPositions;
-	}
+        return mGradientColors;
+    }
+
+
+    /**
+     * Retrieve set of positions to define the gradient of bar's fill.
+     * Gradient fill property must have been previously defined.
+     *
+     * @return Gradient positions.
+     */
+    public float[] getGradientPositions() {
+
+        return mGradientPositions;
+    }
 
 
 	/*
-	 * -------------
+     * -------------
 	 * Setters
 	 * -------------
 	 */
 
+    /**
+     * Set gradient colors to the fill of the {@link com.db.chart.model.Bar}.
+     *
+     * @param colors    The colors to be distributed among gradient
+     * @param positions Position/order from which the colors will be place
+     * @return {@link com.db.chart.model.Bar} self-reference.
+     */
+    public Bar setGradientColor(@NonNull @Size(min = 1) int colors[], float[] positions) {
 
-	/**
-	 * Set gradient colors to the fill of the {@link com.db.chart.model.Bar}.
-	 *
-	 * @param colors The colors to be distributed among gradient
-	 * @param positions Position/order from which the colors will be place
-	 *
-	 * @return {@link com.db.chart.model.Bar} self-reference.
-	 */
-	public Bar setGradientColor(@NonNull int colors[], float[] positions) {
+        if (colors.length == 0)
+            throw new IllegalArgumentException("Colors list cannot be empty");
 
-		if (colors == null || colors.length == 0)
-			throw new IllegalArgumentException("Colors argument can't be null or empty.");
-
-		mHasGradientColor = true;
-		mGradientColors = colors;
-		mGradientPositions = positions;
-		return this;
-	}
+        mHasGradientColor = true;
+        mGradientColors = checkNotNull(colors);
+        mGradientPositions = positions;
+        return this;
+    }
 
 }
