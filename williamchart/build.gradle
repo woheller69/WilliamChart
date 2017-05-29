@@ -3,12 +3,12 @@ apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.github.dcendents.android-maven'
 apply from: rootProject.file('checkstyle.gradle')
 
-version = '2.4.0'
+version = '2.5.0'
 group = 'com.diogobernardino'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    buildToolsVersion '25.0.3'
 
     defaultConfig {
         minSdkVersion 15
