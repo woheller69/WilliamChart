@@ -43,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
                             "market://details?id=" + this.getApplicationContext().getPackageName())));
                 } catch (ActivityNotFoundException e) {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(
-                            "http://play.google.com/store/apps/details?id=" +
-                                    "https://play.google.com/store/apps/details?id=com.db.williamchartdemo")));
+                                    "https://play.google.com/store/apps/details?id="
+                                            + this.getApplicationContext().getPackageName())));
                 }
                 return true;
             default:
