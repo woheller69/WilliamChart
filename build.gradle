@@ -19,6 +19,9 @@ ext {
     supportLibraryVersion = '25.3.1'
     runnerVersion = '0.5'
     espressoVersion = '2.2.2'
+
+    wearableVersion = '2.0.3'
+    playWearableVersion = '11.0.2'
 }
 
 allprojects {
