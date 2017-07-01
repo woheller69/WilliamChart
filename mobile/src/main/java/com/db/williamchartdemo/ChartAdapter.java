@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.db.R;
 import com.db.williamchartdemo.barchart.BarCardOne;
 import com.db.williamchartdemo.barchart.BarCardThree;
 import com.db.williamchartdemo.barchart.BarCardTwo;

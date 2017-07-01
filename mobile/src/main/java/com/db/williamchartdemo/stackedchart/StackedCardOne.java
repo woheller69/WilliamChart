@@ -9,6 +9,7 @@ import android.os.Build;
 import android.support.v7.widget.CardView;
 import android.widget.TextView;
 
+import com.db.R;
 import com.db.chart.util.Tools;
 import com.db.chart.animation.Animation;
 import com.db.chart.listener.OnEntryClickListener;
@@ -17,7 +18,6 @@ import com.db.chart.renderer.XRenderer;
 import com.db.chart.renderer.YRenderer;
 import com.db.chart.view.StackBarChartView;
 import com.db.williamchartdemo.CardController;
-import com.db.williamchartdemo.R;
 
 
 public class StackedCardOne extends CardController {

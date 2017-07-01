@@ -22,6 +22,8 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
+import com.db.R;
+
 
 public class CardController {
 

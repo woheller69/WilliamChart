@@ -10,6 +10,7 @@ import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.db.R;
 import com.db.chart.animation.Animation;
 import com.db.chart.listener.OnEntryClickListener;
 import com.db.chart.model.Bar;
@@ -18,7 +19,6 @@ import com.db.chart.renderer.XRenderer;
 import com.db.chart.tooltip.Tooltip;
 import com.db.chart.view.HorizontalBarChartView;
 import com.db.williamchartdemo.CardController;
-import com.db.williamchartdemo.R;
 
 import java.util.Locale;
 

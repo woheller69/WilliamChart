@@ -8,11 +8,11 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
+import com.db.R;
 import com.db.chart.animation.Animation;
 import com.db.chart.model.BarSet;
 import com.db.chart.view.HorizontalStackBarChartView;
 import com.db.williamchartdemo.CardController;
-import com.db.williamchartdemo.R;
 
 
 public class StackedCardThree extends CardController {

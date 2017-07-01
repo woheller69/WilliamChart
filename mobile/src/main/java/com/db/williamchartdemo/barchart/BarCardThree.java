@@ -8,12 +8,12 @@ import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
+import com.db.R;
 import com.db.chart.animation.Animation;
 import com.db.chart.model.BarSet;
 import com.db.chart.tooltip.Tooltip;
 import com.db.chart.view.BarChartView;
 import com.db.williamchartdemo.CardController;
-import com.db.williamchartdemo.R;
 
 
 public class BarCardThree extends CardController {
