@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.db.R;
 import com.db.chart.util.Tools;
 import com.db.chart.animation.Animation;
 import com.db.chart.model.LineSet;

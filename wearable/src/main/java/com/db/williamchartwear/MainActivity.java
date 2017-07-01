@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.wearable.view.GridViewPager;
 
+import com.db.R;
+
 
 public class MainActivity extends Activity {
 
