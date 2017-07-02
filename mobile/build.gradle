@@ -11,8 +11,8 @@ android {
     defaultConfig {
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
-        versionName "2.4.0"
-        versionCode 16
+        versionName "2.5"
+        versionCode 17
         applicationId "com.db.williamchartdemo"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
